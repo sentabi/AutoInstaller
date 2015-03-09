@@ -28,4 +28,14 @@ apt-get install bsdutils bash-completion nano curl wget dialog ca-certificates
 
 ## PS1 
 echo 'PS1="\[\e[1;30m\][\[\e[1;31m\]\u@\H\[\e[1;30m\]\[\e[0;32m\]\[\e[1;30m\]] \[\e[1;37m\]\w\[\e[0;37m\] \n\$ "' >> ~/.bashrc
-. ~/.bashrc
+source ~/.bashrc
+
+## mengamankan /tmp
+rm -rf /tmp
+mkdir /tmp
+mount -t tmpfs -o rw,noexec,nosuid tmpfs /tmp
+chmod 1777 /tmp
+echo "tmpfs   /tmp    tmpfs   rw,noexec,nosuid        0       0" >> /etc/fstab
+rm -rf /var/tmp
+ln -s /tmp /var/tmp  
+
