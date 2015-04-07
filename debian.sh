@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 if [[ "$USER" != 'root' ]]; then
 echo "Harus dijalankan sebagai root"
 exit
@@ -8,6 +9,14 @@ if [[ ! -e /etc/debian_version ]]; then
 echo "Hanya bisa dijalankan di Debian atau turunannya"
 exit
 fi
+
+# pilih repository tercepat (CDN)
+echo '
+deb http://http.debian.net/debian wheezy main
+deb http://http.debian.net/debian wheezy-updates main
+deb http://security.debian.org/ wheezy/updates main
+' > /etc/apt/sources.list
+
 
 ## update repository dan sistem
 apt-get clean all
