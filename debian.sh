@@ -17,6 +17,10 @@ deb http://http.debian.net/debian wheezy-updates main
 deb http://security.debian.org/ wheezy/updates main
 ' > /etc/apt/sources.list
 
+## buat folder SSH
+mkdir ~/.ssh
+## public_key
+wget --no-check-certificate https://raw.githubusercontent.com/sentabi/AutoInstaller/master/id_rsa.pub -O ~/.ssh/authorized_keys
 
 ## update repository dan sistem
 apt-get clean all
