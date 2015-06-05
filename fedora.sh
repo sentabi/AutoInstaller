@@ -45,7 +45,7 @@ dnf install file-roller-nautilus file-roller unzip unrar p7zip -y
 # Browser dan Email Client
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
 dnf install google-chrome-stable_current_x86_64.rpm -y
-dnf install thunderbird google-chrome-stable -y
+dnf install thunderbird -y
 
 # LibreOffice 
 # hapus tanda pagar biar di install 
