@@ -19,7 +19,7 @@ dnf install rpmfusion*.rpm
 
 # install aplikasi
 
-dnf install firefox gimp inkscape terminator git 
+dnf install firefox gimp inkscape terminator git puddletag pavucontrol
 
 # install sublime 3
 
@@ -29,3 +29,9 @@ mv sublime_text_3 /opt
 ln -s /opt/sublime_text_3/sublime_text /usr/bin/sublime
 
 
+# codec multimedia
+
+dnf install gstreamer-plugins-* gstreamer1-* ffmpeg
+
+# video player
+dnf install vlc smplayer
