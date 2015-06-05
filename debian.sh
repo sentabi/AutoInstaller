@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
-if [[ "$USER" != 'root' ]]; then
-echo "Harus dijalankan sebagai root"
-exit
+if [ "$(id -u)" != "0" ]; then
+   echo "Harus dijalankan sebagai root" 1>&2
+   exit 1
 fi
+
 
 if [[ ! -e /etc/debian_version ]]; then
 echo "Hanya bisa dijalankan di Debian atau turunannya"
