@@ -11,12 +11,27 @@ echo "Hanya bisa dijalankan di Debian atau turunannya"
 exit
 fi
 
-# pilih repository tercepat (CDN)
+VERSION=$(sed 's/\..*//' /etc/debian_version)
+
+if [ $VERSION -eq 8 ]
+then
 echo '
-deb http://http.debian.net/debian wheezy main
-deb http://http.debian.net/debian wheezy-updates main
+deb http://httpredir.debian.org/debian jessie main
+deb http://httpredir.debian.org/debian jessie-updates main
+deb http://security.debian.org/ jessie/updates main
+' > /etc/apt/sources.list
+fi
+
+if [ $VERSION -eq 7 ]
+then
+echo '
+deb http://httpredir.debian.org/debian wheezy main
+deb http://httpredir.debian.org/debian wheezy-updates main
 deb http://security.debian.org/ wheezy/updates main
 ' > /etc/apt/sources.list
+fi
+
+
 
 ## buat folder SSH
 mkdir ~/.ssh
