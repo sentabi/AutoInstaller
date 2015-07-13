@@ -53,7 +53,7 @@ locale-gen en_US.UTF-8
 
 ### install install untuk kebutuhan awal
 ### install ca-certificates biar wget ga protest ERROR: The certificate of xxxxxx
-apt-get install bsdutils bash-completion nano curl wget dialog ca-certificates
+apt-get install bsdutils bash-completion nano curl wget dialog ca-certificates -y
 
 # konfigurasi ulang settingan ssh server'
 dpkg-reconfigure openssh-server
