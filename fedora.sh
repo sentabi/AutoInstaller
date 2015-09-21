@@ -18,14 +18,11 @@ dnf upgrade -y
  
 wget http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-22.noarch.rpm  http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-22.noarch.rpm
 dnf install rpmfusion*.rpm -y
- 
- 
+
 # install aplikasi
- 
 dnf install gimp inkscape terminator git puddletag pavucontrol -y
  
 # install sublime 3
- 
 wget http://c758482.r82.cf2.rackcdn.com/sublime_text_3_build_3083_x64.tar.bz2
 tar jxvf sublime_text_3_build_3083_x64.tar.bz2 
 mv sublime_text_3 /opt
@@ -33,8 +30,7 @@ ln -s /opt/sublime_text_3/sublime_text /usr/bin/sublime
  
  
 # codec multimedia
- 
-dnf install ffmpeg -y
+dnf install ffmpeg youtube-dl -y
 
 # VirtualBox
 dnf install dkms kernel-devel kernel-headers 
