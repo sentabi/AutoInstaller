@@ -21,7 +21,10 @@ dnf install rpmfusion*.rpm -y
 
 # install aplikasi
 dnf install gimp inkscape terminator git puddletag pavucontrol -y
- 
+
+# Password Manager 
+dnf install keepassx 
+
 # install sublime 3
 wget http://c758482.r82.cf2.rackcdn.com/sublime_text_3_build_3083_x64.tar.bz2
 tar jxvf sublime_text_3_build_3083_x64.tar.bz2 
@@ -37,7 +40,6 @@ dnf install dkms kernel-devel kernel-headers
 wget http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo -O /etc/yum.repos.d/virtualbox.repo
 wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | rpm --import -
 
- 
 # Video Player
 dnf install vlc smplayer -y
  
