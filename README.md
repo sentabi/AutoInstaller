@@ -1,4 +1,4 @@
-# AutoInstaller
+# Script AutoInstaller Linux
 
 AutoInstaller dan auto auto-an. 
 
@@ -17,11 +17,21 @@ chmod +x debian.sh
 ```
 jalankan script
 ```
-./debian
+./debian.sh
+```
+
+### Fedora
+
+Download + install script
+```
+wget --no-check-certificate https://raw.githubusercontent.com/sentabi/AutoInstaller/master/fedora.sh
+chmod +x fedora.sh
+./fedora.sh
 ```
 
 ## Distro
-Distro Linux yang sudah di coba menggunakan script diatas 
-Debian 8 32/64
-Debian 7 32/64
-Debian 6 32/64
+Distro Linux yang sudah di coba
+- Debian 8 32/64
+- Debian 7 32/64
+- Fedora 22 32/64
+- Fedora 23 32/64
