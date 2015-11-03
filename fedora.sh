@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
  
-## Fedora 22+ / 64 bit
+## Fedora 22/23 64 bit
 ## jangan asal di jalankan, liat dulu scriptna untuk menghindari hal-hal yang tidak 
 ## diinginkan
  
@@ -24,6 +24,9 @@ dnf install gimp inkscape terminator git puddletag pavucontrol -y
 
 # Password Manager 
 dnf install keepassx 
+
+# ownCloud Client
+dnf install owncloud-client 
 
 # install sublime 3
 wget http://c758482.r82.cf2.rackcdn.com/sublime_text_3_build_3083_x64.tar.bz2
@@ -54,7 +57,7 @@ dnf install thunderbird firefox google-chrome-stable -y
 # LibreOffice 
 dnf install libreoffice
  
-## LAMP 
+## LAMP untu Web Development
 dnf install httpd mariadb mariadb-server php php-pdo phpMyAdmin php-cli php-mysqlnd php-mcrypt php-xml
 
 ### Install Composer 
@@ -74,8 +77,7 @@ echo '<?xml version="1.0"?>
 ln -s /etc/fonts/conf.avail/10-autohint.conf /etc/fonts/conf.d/
 ln -s /etc/fonts/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d/
  
-echo '
-<?xml version="1.0"?>
+echo '<?xml version="1.0"?>
 <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
 <fontconfig>
  <match target="font" >
@@ -103,8 +105,7 @@ echo '
    <bool>true</bool>
   </edit>
  </match>
-</fontconfig>
-' > /home/$USER/.fonts.conf
+</fontconfig>' > /home/$USER/.fonts.conf
 
 ## Generate SSH Key
 ssh-keygen -b 4096 
