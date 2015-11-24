@@ -3,9 +3,10 @@
 AutoInstaller dan auto auto-an. 
 
 cek baik-baik scriptnya ;) karena otomatis menambahkan beberapa public key saya :)
+Ganti link ke `id_rsa.pub` dengan public key anda. 
 
 ## Cara Penggunaan
-=====
+
 Sesuaikan dengan distro anda. 
 ### Debian 
 ```
@@ -17,7 +18,7 @@ chmod +x debian.sh
 ```
 jalankan script
 ```
-./debian.sh
+su -c "./debian.sh"
 ```
 
 ### Fedora
@@ -26,7 +27,7 @@ Download + install script
 ```
 wget --no-check-certificate https://raw.githubusercontent.com/sentabi/AutoInstaller/master/fedora.sh
 chmod +x fedora.sh
-./fedora.sh
+su -c "./fedora.sh"
 ```
 
 ## Distro
