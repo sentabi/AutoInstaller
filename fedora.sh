@@ -48,7 +48,13 @@ dnf install vlc smplayer -y
  
 # ekstrator 
 dnf install file-roller-nautilus file-roller unzip unrar p7zip -y
- 
+
+# Mount Android/Samba
+dnf install libmtp-devel libmtp gvfs-mtp simple-mtpfs libusb gvfs-client gvfs-smb gvfs-fuse
+
+# Mount SSH/Samba/Windows Share
+dnf install gigolo
+
 # Browser dan Email Client
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
 dnf install google-chrome-stable_current_x86_64.rpm -y
