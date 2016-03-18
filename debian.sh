@@ -7,7 +7,7 @@ fi
 
 
 if [[ ! -e /etc/debian_version ]]; then
-echo "Hanya bisa dijalankan di Debian atau turunannya"
+echo "Hanya bisa dijalankan di Debian"
 exit
 fi
 
@@ -49,17 +49,19 @@ cp /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 echo 'en_US.UTF-8 UTF-8' > /etc/locale.gen
 locale-gen en_US.UTF-8
 
-### install install untuk kebutuhan awal
 ### install ca-certificates biar wget ga protest ERROR: The certificate of xxxxxx
 apt-get install bsdutils bash-completion nano curl wget dialog ca-certificates -y
 
-# konfigurasi ulang settingan ssh server'
+# konfigurasi ulang OpenSSH server'
 dpkg-reconfigure openssh-server
 ## PS1 
 echo 'PS1="\[\e[1;30m\][\[\e[1;31m\]\u@\H\[\e[1;30m\]\[\e[0;32m\]\[\e[1;30m\]] \[\e[1;37m\]\w\[\e[0;37m\] \n\$ "' >> ~/.bashrc
 . ~/.bashrc
 
-## mengamankan /tmp
+# Dll
+apt-get install rsync htop vnstat
+
+# mengamankan /tmp
 rm -rf /tmp
 mkdir /tmp
 mount -t tmpfs -o rw,noexec,nosuid tmpfs /tmp
