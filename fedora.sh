@@ -20,7 +20,7 @@ wget http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-22.noarch
 dnf install rpmfusion*.rpm -y
 
 # install aplikasi
-dnf install gimp inkscape terminator git puddletag pavucontrol -y
+dnf install gimp inkscape terminator git puddletag pavucontrol tigervnc -y
 
 # Password Manager 
 dnf install keepassx 
@@ -36,7 +36,7 @@ ln -s /opt/sublime_text_3/sublime_text /usr/bin/sublime
  
  
 # codec multimedia
-dnf install ffmpeg youtube-dl -y
+dnf gstreamer-plugins-* gstreamer1-* ffmpeg youtube-dl -y
 
 # VirtualBox
 wget http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo -O /etc/yum.repos.d/virtualbox.repo
