@@ -10,7 +10,7 @@ if [ "$(id -u)" != "0" ]; then
 fi
  
 # Update Repo dan Upgrade
- 
+
 dnf update -y
 dnf upgrade -y
  
@@ -29,8 +29,8 @@ dnf install keepassx
 dnf install owncloud-client 
 
 # install sublime 3
-wget http://c758482.r82.cf2.rackcdn.com/sublime_text_3_build_3083_x64.tar.bz2
-tar jxvf sublime_text_3_build_3083_x64.tar.bz2 
+wget https://download.sublimetext.com/sublime_text_3_build_3103_x64.tar.bz2
+tar jxvf sublime_text_3_build_3103_x64.tar.bz2 
 mv sublime_text_3 /opt
 ln -s /opt/sublime_text_3/sublime_text /usr/bin/sublime
  
@@ -39,21 +39,17 @@ ln -s /opt/sublime_text_3/sublime_text /usr/bin/sublime
 dnf install ffmpeg youtube-dl -y
 
 # VirtualBox
-dnf install dkms kernel-devel kernel-headers 
 wget http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo -O /etc/yum.repos.d/virtualbox.repo
 wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | rpm --import -
-
+dnf install VirtualBox
 # Video Player
-dnf install vlc smplayer -y
+dnf install dkms kernel-devel kernel-headers vlc smplayer -y
  
 # ekstrator 
 dnf install file-roller-nautilus file-roller unzip unrar p7zip -y
 
 # Mount Android/Samba
-dnf install libmtp-devel libmtp gvfs-mtp simple-mtpfs libusb gvfs-client gvfs-smb gvfs-fuse
-
-# Mount SSH/Samba/Windows Share
-dnf install gigolo
+dnf install libmtp-devel libmtp gvfs-mtp simple-mtpfs libusb gvfs-client gvfs-smb gvfs-fuse gigolo -y
 
 # Browser dan Email Client
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
@@ -61,10 +57,10 @@ dnf install google-chrome-stable_current_x86_64.rpm -y
 dnf install thunderbird firefox google-chrome-stable -y
  
 # LibreOffice 
-dnf install libreoffice
+dnf install libreoffice -y
  
 ## LAMP untu Web Development
-dnf install httpd mariadb mariadb-server php php-pdo phpMyAdmin php-cli php-mysqlnd php-mcrypt php-xml
+dnf install httpd mariadb mariadb-server php php-pdo phpMyAdmin php-cli php-mysqlnd php-mcrypt php-xml -y
 
 ### Install Composer 
 curl -sS https://getcomposer.org/installer | php
@@ -114,4 +110,4 @@ echo '<?xml version="1.0"?>
 </fontconfig>' > /home/$USER/.fonts.conf
 
 ## Generate SSH Key
-ssh-keygen -b 4096 
+#ssh-keygen -b 4096 
