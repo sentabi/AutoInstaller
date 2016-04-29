@@ -8,25 +8,29 @@ if [ "$(id -u)" != "0" ]; then
    echo "This script must be run as root" 1>&2
    exit 1
 fi
- 
-# Update Repo dan Upgrade
 
+# Hapus aplikasi yang ngga perlu 
+dnf remove transmission -y
+
+# Update Repo dan Upgrade
 dnf update -y
 dnf upgrade -y
  
 # RPM FUSION
- 
-wget http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-22.noarch.rpm  http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-22.noarch.rpm
+ wget http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-22.noarch.rpm  http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-22.noarch.rpm
 dnf install rpmfusion*.rpm -y
 
 # install aplikasi
 dnf install gimp inkscape terminator git puddletag pavucontrol tigervnc wireshark nmap -y
 
+# Torrent Client 
+dnf install deluge -y
+
 # Password Manager 
-dnf install keepassx 
+dnf install keepassx -y
 
 # ownCloud Client
-dnf install owncloud-client 
+dnf install owncloud-client -y
 
 # install sublime 3
 wget https://download.sublimetext.com/sublime_text_3_build_3103_x64.tar.bz2
