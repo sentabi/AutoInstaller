@@ -20,7 +20,7 @@ wget http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-22.noarch
 dnf install rpmfusion*.rpm -y
 
 # install aplikasi
-dnf install gimp inkscape terminator git puddletag pavucontrol tigervnc -y
+dnf install gimp inkscape terminator git puddletag pavucontrol tigervnc wireshark nmap -y
 
 # Password Manager 
 dnf install keepassx 
