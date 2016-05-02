@@ -11,6 +11,7 @@ fi
 
 # Hapus aplikasi yang ngga perlu 
 dnf remove transmission -y
+dnf remove abrt-* -y
 
 # Update Repo dan Upgrade
 dnf update -y
