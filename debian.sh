@@ -59,9 +59,10 @@ echo 'PS1="\[\e[1;30m\][\[\e[1;31m\]\u@\H\[\e[1;30m\]\[\e[0;32m\]\[\e[1;30m\]] \
 . ~/.bashrc
 
 # Dll
-apt-get install rsync htop vnstat
+apt-get install rsync htop vnstat -y
 
 # mengamankan /tmp
+cd ~
 rm -rf /tmp
 mkdir /tmp
 mount -t tmpfs -o rw,noexec,nosuid tmpfs /tmp
