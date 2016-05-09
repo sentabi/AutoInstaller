@@ -116,3 +116,11 @@ echo '<?xml version="1.0"?>
 
 ## Generate SSH Key
 #ssh-keygen -b 4096 
+
+# install font 
+wget http://font.ubuntu.com/download/ubuntu-font-family-0.83.zip
+unzip ubuntu-font-family-0.83.zip
+mv ubuntu-font-family-0.83 /usr/share/fonts/
+wget https://github.com/downloads/adobe-fonts/source-code-pro/SourceCodePro_FontsOnly-1.013.zip
+unzip SourceCodePro_FontsOnly-1.013.zip
+mv SourceCodePro_FontsOnly-1.013 /usr/share/fonts/
