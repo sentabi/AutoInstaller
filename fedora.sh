@@ -38,7 +38,9 @@ wget https://download.sublimetext.com/sublime_text_3_build_3103_x64.tar.bz2
 tar jxvf sublime_text_3_build_3103_x64.tar.bz2 
 mv sublime_text_3 /opt
 ln -s /opt/sublime_text_3/sublime_text /usr/bin/sublime
- 
+
+# XFCE
+dnf install xfce4-mixer xfce4-volumed -y
  
 # codec multimedia
 dnf gstreamer-plugins-* gstreamer1-* ffmpeg youtube-dl -y
