@@ -22,7 +22,7 @@ dnf upgrade -y
 dnf install rpmfusion*.rpm -y
 
 # install aplikasi
-dnf install gimp inkscape terminator git puddletag pavucontrol tigervnc wireshark nmap -y
+dnf install gimp inkscape terminator git puddletag pavucontrol tigervnc wireshark nmap uget -y
 
 # Torrent Client 
 dnf install deluge -y
