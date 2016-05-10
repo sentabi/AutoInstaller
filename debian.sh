@@ -13,23 +13,26 @@ fi
 
 VERSION=$(sed 's/\..*//' /etc/debian_version)
 
-if [ $VERSION -eq 8 ]
-then
-echo '
-deb http://httpredir.debian.org/debian jessie main
-deb http://httpredir.debian.org/debian jessie-updates main
-deb http://security.debian.org/ jessie/updates main
-' > /etc/apt/sources.list
-fi
+#if [ $VERSION -eq 8 ]
+#then
+#echo '
+#deb http://httpredir.debian.org/debian jessie main
+#deb http://httpredir.debian.org/debian jessie-updates main
+#deb http://security.debian.org/ jessie/updates main
+#' > /etc/apt/sources.list
+#fi
 
-if [ $VERSION -eq 7 ]
-then
-echo '
-deb http://httpredir.debian.org/debian wheezy main
-deb http://httpredir.debian.org/debian wheezy-updates main
-deb http://security.debian.org/ wheezy/updates main
-' > /etc/apt/sources.list
-fi
+#if [ $VERSION -eq 7 ]
+#then
+#echo '
+#deb http://httpredir.debian.org/debian wheezy main
+#deb http://httpredir.debian.org/debian wheezy-updates main
+#deb http://security.debian.org/ wheezy/updates main
+#' > /etc/apt/sources.list
+#fi
+
+# hapus yang ngga perlu 
+apt-get remove apt-get purge exim4* rpcbind -y  
 
 ## update repository dan sistem
 apt-get clean all
