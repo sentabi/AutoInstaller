@@ -10,7 +10,7 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 # Hapus aplikasi yang ngga perlu 
-dnf remove transmission -y
+dnf remove transmission claws-mail-* midori -y
 dnf remove abrt-* -y
 
 # Update Repo dan Upgrade
@@ -18,11 +18,11 @@ dnf update -y
 dnf upgrade -y
  
 # RPM FUSION
- wget http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-22.noarch.rpm  http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-22.noarch.rpm
-dnf install rpmfusion*.rpm -y
+dnf install http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+
 
 # install aplikasi
-dnf install gimp inkscape terminator git puddletag pavucontrol tigervnc wireshark nmap uget -y
+dnf install gimp inkscape terminator git puddletag pavucontrol tigervnc wireshark nmap uget rfkill remmina remmina-plugins* openvpn -y
 
 # Torrent Client 
 dnf install deluge -y
@@ -34,8 +34,8 @@ dnf install keepassx -y
 dnf install owncloud-client -y
 
 # install sublime 3
-wget https://download.sublimetext.com/sublime_text_3_build_3103_x64.tar.bz2
-tar jxvf sublime_text_3_build_3103_x64.tar.bz2 
+wget https://download.sublimetext.com/sublime_text_3_build_3114_x64.tar.bz2
+tar jxvf sublime_text_3_build_*.tar.bz2 
 mv sublime_text_3 /opt
 ln -s /opt/sublime_text_3/sublime_text /usr/bin/sublime
 
@@ -43,17 +43,18 @@ ln -s /opt/sublime_text_3/sublime_text /usr/bin/sublime
 dnf install xfce4-mixer xfce4-volumed -y
  
 # codec multimedia
-dnf gstreamer-plugins-* gstreamer1-* ffmpeg youtube-dl -y
+dnf  gstreamer-plugins-* gstreamer1-* ffmpeg youtube-dl -y
+# Multimedia Player
+dnf install vlc smplayer clementine -y
 
 # VirtualBox
+dnf install dkms kernel-devel kernel-headers
 wget http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo -O /etc/yum.repos.d/virtualbox.repo
 wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | rpm --import -
 dnf install VirtualBox
-# Video Player
-dnf install dkms kernel-devel kernel-headers vlc smplayer -y
  
 # ekstrator 
-dnf install file-roller-nautilus file-roller unzip unrar p7zip -y
+dnf install file-roller-nautilus file-roller unzip unrar p7zip unrar -y
 
 # Mount Android/Samba
 dnf install libmtp-devel libmtp gvfs-mtp simple-mtpfs libusb gvfs-client gvfs-smb gvfs-fuse gigolo -y
@@ -119,7 +120,8 @@ echo '<?xml version="1.0"?>
 ## Generate SSH Key
 #ssh-keygen -b 4096 
 
-# install font 
+# Font 
+dnf install https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
 wget http://font.ubuntu.com/download/ubuntu-font-family-0.83.zip
 unzip ubuntu-font-family-0.83.zip
 mv ubuntu-font-family-0.83 /usr/share/fonts/
