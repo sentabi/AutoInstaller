@@ -16,13 +16,13 @@ dnf remove abrt-* -y
 # Update Repo dan Upgrade
 dnf update -y
 dnf upgrade -y
- 
+
 # RPM FUSION
-dnf install http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+dnf install http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
 
 
 # install aplikasi
-dnf install gimp inkscape terminator git puddletag pavucontrol tigervnc wireshark nmap uget rfkill remmina remmina-plugins* openvpn -y
+dnf install gimp inkscape terminator git puddletag pavucontrol tigervnc nano wireshark nmap uget rfkill remmina remmina-plugins* openvpn -y
 
 # Torrent Client 
 dnf install deluge -y
@@ -41,18 +41,17 @@ ln -s /opt/sublime_text_3/sublime_text /usr/bin/sublime
 
 # XFCE
 dnf install xfce4-mixer xfce4-volumed -y
- 
+
 # codec multimedia
-dnf  gstreamer-plugins-* gstreamer1-* ffmpeg youtube-dl -y
+dnf install  gstreamer-plugins-* gstreamer1-* ffmpeg youtube-dl -y
 # Multimedia Player
 dnf install vlc smplayer clementine -y
 
 # VirtualBox
-dnf install dkms kernel-devel kernel-headers
 wget http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo -O /etc/yum.repos.d/virtualbox.repo
-wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | rpm --import -
-dnf install VirtualBox
- 
+#wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | rpm --import -
+dnf install dkms kernel-devel kernel-headers VirtualBox -y
+
 # ekstrator 
 dnf install file-roller-nautilus file-roller unzip unrar p7zip unrar -y
 
@@ -62,7 +61,7 @@ dnf install libmtp-devel libmtp gvfs-mtp simple-mtpfs libusb gvfs-client gvfs-sm
 # Browser dan Email Client
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
 dnf install google-chrome-stable_current_x86_64.rpm -y
-dnf install thunderbird firefox google-chrome-stable -y
+dnf install thunderbird firefox -y
  
 # LibreOffice 
 dnf install libreoffice -y
@@ -121,7 +120,7 @@ echo '<?xml version="1.0"?>
 #ssh-keygen -b 4096 
 
 # Font 
-dnf install https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
+dnf install https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm -y
 wget http://font.ubuntu.com/download/ubuntu-font-family-0.83.zip
 unzip ubuntu-font-family-0.83.zip
 mv ubuntu-font-family-0.83 /usr/share/fonts/
