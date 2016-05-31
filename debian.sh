@@ -32,17 +32,12 @@ VERSION=$(sed 's/\..*//' /etc/debian_version)
 #fi
 
 # hapus yang ngga perlu 
-apt-get remove apt-get purge exim4* rpcbind -y  
+apt-get purge exim4* rpcbind -y  
 
 ## update repository dan sistem
 apt-get clean all
 apt-get update
 apt-get upgrade -y
-
-## buat folder SSH
-mkdir ~/.ssh
-## public_key
-wget --no-check-certificate https://raw.githubusercontent.com/sentabi/AutoInstaller/master/id_rsa.pub -O ~/.ssh/authorized_keys
 
 ### update timezone  Jakarta
 rm -f /etc/localtime
@@ -74,3 +69,10 @@ echo "tmpfs   /tmp    tmpfs   rw,noexec,nosuid        0       0" >> /etc/fstab
 rm -rf /var/tmp
 ln -s /tmp /var/tmp  
 
+# SSH 
+
+## Generate SSH Key
+ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa -q
+
+## Add public_key
+wget --no-check-certificate https://raw.githubusercontent.com/sentabi/AutoInstaller/master/id_rsa.pub -O ~/.ssh/authorized_keys
