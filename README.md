@@ -10,7 +10,7 @@ Ganti link ke `id_rsa.pub` dengan public key anda.
 Sesuaikan dengan distro anda. 
 ### Debian 
 ```
-wget --no-check-certificate https://raw.githubusercontent.com/sentabi/AutoInstaller/master/debian.sh 
+wget --no-check-certificate https://git.io/vvIPF 
 ```
 ubah file permission agar bisa dieksekusi
 ```
