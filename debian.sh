@@ -48,7 +48,7 @@ echo 'en_US.UTF-8 UTF-8' > /etc/locale.gen
 locale-gen en_US.UTF-8
 
 ### install ca-certificates biar wget ga protest ERROR: The certificate of xxxxxx
-apt-get install bsdutils bash-completion nano curl wget dialog ca-certificates -y
+apt-get install mtr bsdutils bash-completion nano curl wget dialog ca-certificates -y
 
 # konfigurasi ulang OpenSSH server'
 dpkg-reconfigure openssh-server
