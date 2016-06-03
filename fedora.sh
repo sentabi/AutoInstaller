@@ -68,7 +68,10 @@ dnf install libmtp-devel libmtp gvfs-mtp simple-mtpfs libusb gvfs-client gvfs-sm
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm | tee -a $LOG
 dnf install google-chrome-stable_current_x86_64.rpm -y | tee -a $LOG
 dnf install thunderbird firefox -y | tee -a $LOG
- 
+
+# network 
+dnf install mtr -y
+
 # LibreOffice 
 dnf install libreoffice -y | tee -a $LOG
  
