@@ -31,7 +31,7 @@ deb http://security.debian.org/ wheezy/updates main
 fi
 
 # hapus yang ngga perlu 
-apt-get purge exim4* rpcbind -y  
+apt-get purge exim4* rpcbind samba* -y  
 
 ## update repository dan sistem
 apt-get clean all
