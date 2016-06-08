@@ -5,7 +5,6 @@ if [ "$(id -u)" != "0" ]; then
    exit 1
 fi
 
-
 if [[ ! -e /etc/debian_version ]]; then
 echo "Hanya bisa dijalankan di Debian"
 exit
@@ -13,23 +12,23 @@ fi
 
 VERSION=$(sed 's/\..*//' /etc/debian_version)
 
-#if [ $VERSION -eq 8 ]
-#then
-#echo '
-#deb http://httpredir.debian.org/debian jessie main
-#deb http://httpredir.debian.org/debian jessie-updates main
-#deb http://security.debian.org/ jessie/updates main
-#' > /etc/apt/sources.list
-#fi
+if [ $VERSION -eq 8 ]
+then
+echo '
+deb http://httpredir.debian.org/debian jessie main
+deb http://httpredir.debian.org/debian jessie-updates main
+deb http://security.debian.org/ jessie/updates main
+' > /etc/apt/sources.list
+fi
 
-#if [ $VERSION -eq 7 ]
-#then
-#echo '
-#deb http://httpredir.debian.org/debian wheezy main
-#deb http://httpredir.debian.org/debian wheezy-updates main
-#deb http://security.debian.org/ wheezy/updates main
-#' > /etc/apt/sources.list
-#fi
+if [ $VERSION -eq 7 ]
+then
+echo '
+deb http://httpredir.debian.org/debian wheezy main
+deb http://httpredir.debian.org/debian wheezy-updates main
+deb http://security.debian.org/ wheezy/updates main
+' > /etc/apt/sources.list
+fi
 
 # hapus yang ngga perlu 
 apt-get purge exim4* rpcbind -y  
@@ -57,7 +56,7 @@ echo 'PS1="\[\e[1;30m\][\[\e[1;31m\]\u@\H\[\e[1;30m\]\[\e[0;32m\]\[\e[1;30m\]] \
 . ~/.bashrc
 
 # Dll
-apt-get install rsync htop vnstat -y
+apt-get install rsync htop rsnapshot vnstat -y
 
 # mengamankan /tmp
 cd ~
@@ -68,8 +67,6 @@ chmod 1777 /tmp
 echo "tmpfs   /tmp    tmpfs   rw,noexec,nosuid        0       0" >> /etc/fstab
 rm -rf /var/tmp
 ln -s /tmp /var/tmp  
-
-# SSH 
 
 ## Generate SSH Key
 ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa -q
