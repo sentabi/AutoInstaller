@@ -50,7 +50,7 @@ echo 'en_US.UTF-8 UTF-8' > /etc/locale.gen
 locale-gen en_US.UTF-8
 
 ### install ca-certificates biar wget ga protest ERROR: The certificate of xxxxxx
-apt-get install bsdutils bash-completion nano dialog ca-certificates -y
+apt-get install bsdutils bash-completion nano dialog curl ca-certificates -y
 
 # konfigurasi ulang OpenSSH server'
 dpkg-reconfigure openssh-server
@@ -62,7 +62,7 @@ source ~/.bashrc
 apt-get install rsync htop rsnapshot vnstat mtr iperf curl wget dnsutils -y
 
 # LEMP 
-apt-get install nginx mysql-server apache2 php5 php5-common php5-gd php5-xmlrpc curl php5-curl php5-intl php5-mcrypt php5-imagick php5-mysqlnd -y
+apt-get install nginx mysql-server php5 php5-common php5-gd php5-xmlrpc php5-fpm php5-curl php5-intl php5-mcrypt php5-imagick php5-mysqlnd -y
 
 # mengamankan /tmp
 cd ~
