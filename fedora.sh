@@ -129,7 +129,7 @@ echo '<?xml version="1.0"?>
 #ssh-keygen -b 4096 
 
 # Font 
-dnf install freetype-freeworld
+dnf install freetype-freeworld -y
 dnf install https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm -y | tee -a $LOG
 wget http://font.ubuntu.com/download/ubuntu-font-family-0.83.zip | tee -a $LOG
 unzip ubuntu-font-family-0.83.zip | tee -a $LOG
