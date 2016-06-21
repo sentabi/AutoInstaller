@@ -10,28 +10,31 @@ echo "Hanya bisa dijalankan di Debian"
 exit
 fi
 
-VERSION=$(sed 's/\..*//' /etc/debian_version)
+#VERSION=$(sed 's/\..*//' /etc/debian_version)
+CODENAME=$(awk -F"[)(]+" '/VERSION=/ {print $2}' /etc/os-release)
+#if [ $VERSION -eq 8 ]
+#then
+#echo '
+#deb http://httpredir.debian.org/debian jessie main
+#deb http://httpredir.debian.org/debian jessie-updates main
+#deb http://security.debian.org/ jessie/updates main
+#' > /etc/apt/sources.list
+#fi
 
-if [ $VERSION -eq 8 ]
-then
-echo '
-deb http://httpredir.debian.org/debian jessie main
-deb http://httpredir.debian.org/debian jessie-updates main
-deb http://security.debian.org/ jessie/updates main
-' > /etc/apt/sources.list
-fi
-
-if [ $VERSION -eq 7 ]
-then
-echo '
-deb http://httpredir.debian.org/debian wheezy main
-deb http://httpredir.debian.org/debian wheezy-updates main
-deb http://security.debian.org/ wheezy/updates main
-' > /etc/apt/sources.list
-fi
+#if [ $VERSION -eq 7 ]
+#then
+#echo '
+#deb http://httpredir.debian.org/debian wheezy main
+#deb http://httpredir.debian.org/debian wheezy-updates main
+#deb http://security.debian.org/ wheezy/updates main
+#' > /etc/apt/sources.list
+#fi
 
 # hapus yang ngga perlu 
 apt-get purge exim4* rpcbind samba* -y  
+
+# Repostory nginx
+echo 'deb http://nginx.org/packages/mainline/debian/ '$CODENAME' nginx' >> /etc/apt/sources.list
 
 ## update repository dan sistem
 apt-get clean all
@@ -47,16 +50,19 @@ echo 'en_US.UTF-8 UTF-8' > /etc/locale.gen
 locale-gen en_US.UTF-8
 
 ### install ca-certificates biar wget ga protest ERROR: The certificate of xxxxxx
-apt-get install mtr iperf bsdutils bash-completion nano curl wget dialog ca-certificates -y
+apt-get install bsdutils bash-completion nano dialog ca-certificates -y
 
 # konfigurasi ulang OpenSSH server'
 dpkg-reconfigure openssh-server
 ## PS1 
-echo 'PS1="\[\e[1;30m\][\[\e[1;31m\]\u@\H\[\e[1;30m\]\[\e[0;32m\]\[\e[1;30m\]] \[\e[1;37m\]\w\[\e[0;37m\] \n\$ "' >> ~/.bashrc
-. ~/.bashrc
+echo 'PS1="\[\e[1;30m\][\[\e[1;33m\]\u@\H\[\e[1;30m\]\[\e[0;32m\]\[\e[1;30m\]] \[\e[1;37m\]\w\[\e[0;37m\] \n\$ "' >> ~/.bashrc
+source ~/.bashrc
 
-# Dll
-apt-get install rsync htop rsnapshot vnstat -y
+# Network Tools
+apt-get install rsync htop rsnapshot vnstat mtr iperf curl wget dnsutils -y
+
+# LEMP 
+apt-get install nginx mysql-server apache2 php5 php5-common php5-gd php5-xmlrpc curl php5-curl php5-intl php5-mcrypt php5-imagick php5-mysqlnd -y
 
 # mengamankan /tmp
 cd ~
