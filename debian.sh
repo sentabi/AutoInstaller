@@ -34,6 +34,7 @@ CODENAME=$(awk -F"[)(]+" '/VERSION=/ {print $2}' /etc/os-release)
 apt-get purge exim4* rpcbind samba* -y  
 
 # Repostory nginx
+wget -qO - http://nginx.org/keys/nginx_signing.key | apt-key add -
 echo 'deb http://nginx.org/packages/mainline/debian/ '$CODENAME' nginx' >> /etc/apt/sources.list
 
 ## update repository dan sistem
