@@ -65,6 +65,8 @@ apt-get install rsync htop rsnapshot vnstat mtr iperf curl wget dnsutils -y
 # LEMP 
 apt-get install nginx mysql-server php5 php5-common php5-gd php5-xmlrpc php5-fpm php5-curl php5-intl php5-mcrypt php5-imagick php5-mysqlnd -y
 
+apt-get install git 
+
 # Composer 
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/bin/composer
