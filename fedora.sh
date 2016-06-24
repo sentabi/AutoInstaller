@@ -46,7 +46,7 @@ mv sublime_text_3 /opt
 ln -s /opt/sublime_text_3/sublime_text /usr/bin/sublime
 
 # XFCE
-dnf install xfce4-mixer xfce4-volumed -y | tee -a $LOG
+dnf install xfce4-mixer xfce4-volumed bluebird-gtk3-theme bluebird-gtk2-theme bluebird-xfwm4-theme y | tee -a $LOG
 
 # codec multimedia
 dnf install  gstreamer-plugins-* gstreamer1-* ffmpeg youtube-dl -y | tee -a $LOG
