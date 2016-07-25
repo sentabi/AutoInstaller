@@ -8,6 +8,7 @@ LOG=/tmp/fedora.log
 
 # hapus log yang sudah ada
 rm -f $LOG
+touch $LOG
 
 if [ "$(id -u)" != "0" ]; then
    echo "This script must be run as root" 1>&2
@@ -15,7 +16,7 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 # Hapus aplikasi yang ngga perlu 
-dnf remove transmission claws-mail-* midori -y | tee -a $LOG
+dnf remove transmission claws-mail-* midori pidgin -y | tee -a $LOG
 dnf remove abrt-* -y | tee -a $LOG
 
 # Update Repo dan Upgrade
@@ -28,7 +29,7 @@ dnf install http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(
 
 
 # install aplikasi
-dnf install gimp inkscape vnstat terminator git puddletag pavucontrol tigervnc nano wireshark nmap uget rfkill remmina remmina-plugins* openvpn -y | tee -a $LOG
+dnf install gimp inkscape vnstat terminator git puddletag pavucontrol tigervnc shotwell htop nano wireshark nmap uget rfkill remmina remmina-plugins* openvpn -y | tee -a $LOG
 
 # Torrent Client 
 dnf install deluge -y | tee -a $LOG
@@ -126,7 +127,7 @@ echo '<?xml version="1.0"?>
 </fontconfig>' > /home/$USER/.fonts.conf | tee -a $LOG
 
 ## Generate SSH Key
-#ssh-keygen -b 4096 
+ssh-keygen -b 4096 
 
 # Font 
 dnf install freetype-freeworld -y | tee -a $LOG
@@ -137,4 +138,10 @@ mv ubuntu-font-family-0.83 /usr/share/fonts/ | tee -a $LOG
 wget https://github.com/downloads/adobe-fonts/source-code-pro/SourceCodePro_FontsOnly-1.013.zip | tee -a $LOG
 unzip SourceCodePro_FontsOnly-1.013.zip | tee -a $LOG
 mv SourceCodePro_FontsOnly-1.013 /usr/share/fonts/ | tee -a $LOG
+
+# Tweak XFCE 
+xfconf-query -c xfce4-panel -p /plugins/plugin-1/show-button-title -s "false"
+xfconf-query -c xfce4-panel -p /plugins/plugin-1/button-icon -s "ibus-hangul"
+xfconf-query -c xfwm4 -p /general/theme -s "Bluebird"
+xfconf-query -c xsettings -p /Net/ThemeName -s "Glossy"
 
