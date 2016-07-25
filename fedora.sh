@@ -57,7 +57,7 @@ dnf install vlc smplayer clementine -y | tee -a $LOG
 # VirtualBox
 wget http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo -O /etc/yum.repos.d/virtualbox.repo | tee -a $LOG
 wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | rpm --import - | tee -a $LOG
-dnf install gcc make dkms kernel-devel kernel-headers VirtualBox-5.1 -y | tee -a $LOG
+dnf install gcc make dkms kernel-devel-$(uname -r) kernel-headers VirtualBox-5.1 -y | tee -a $LOG
 
 # ekstrator 
 dnf install file-roller-nautilus file-roller unzip unrar p7zip unrar -y | tee -a $LOG
