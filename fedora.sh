@@ -57,7 +57,7 @@ dnf install vlc smplayer clementine -y | tee -a $LOG
 # VirtualBox
 wget http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo -O /etc/yum.repos.d/virtualbox.repo | tee -a $LOG
 wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | rpm --import - | tee -a $LOG
-dnf install dkms kernel-devel kernel-headers VirtualBox -y | tee -a $LOG
+dnf install dkms kernel-devel kernel-headers VirtualBox-5.1 -y | tee -a $LOG
 
 # ekstrator 
 dnf install file-roller-nautilus file-roller unzip unrar p7zip unrar -y | tee -a $LOG
@@ -144,6 +144,9 @@ xfconf-query -c xfce4-panel -p /plugins/plugin-1/show-button-title -s "false"
 xfconf-query -c xfce4-panel -p /plugins/plugin-1/button-icon -s "ibus-hangul"
 xfconf-query -c xfwm4 -p /general/theme -s "Bluebird"
 xfconf-query -c xsettings -p /Net/ThemeName -s "Glossy"
+
+dnf remove xfce4-pulseaudio-plugin
+dnf install xfce4-volumed
 
 # Disable Selinux. Enable setelah semua di testing ;)
 sed -i s/SELINUX=enforcing/SELINUX=disabled/g /etc/selinux/config 
