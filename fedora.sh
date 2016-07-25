@@ -4,7 +4,6 @@
 ## jangan asal di jalankan, liat dulu scriptna untuk menghindari hal-hal yang tidak 
 ## diinginkan
 
-
 LOG=/tmp/fedora.log
 
 # hapus log yang sudah ada
@@ -20,6 +19,7 @@ dnf remove transmission claws-mail-* midori -y | tee -a $LOG
 dnf remove abrt-* -y | tee -a $LOG
 
 # Update Repo dan Upgrade
+dnf clean all | tee -a $LOG
 dnf update -y | tee -a $LOG
 dnf upgrade -y | tee -a $LOG
 
@@ -28,7 +28,7 @@ dnf install http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(
 
 
 # install aplikasi
-dnf install gimp inkscape terminator git puddletag pavucontrol tigervnc nano wireshark nmap uget rfkill remmina remmina-plugins* openvpn -y | tee -a $LOG
+dnf install gimp inkscape vnstat terminator git puddletag pavucontrol tigervnc nano wireshark nmap uget rfkill remmina remmina-plugins* openvpn -y | tee -a $LOG
 
 # Torrent Client 
 dnf install deluge -y | tee -a $LOG
@@ -70,7 +70,7 @@ dnf install google-chrome-stable_current_x86_64.rpm -y | tee -a $LOG
 dnf install thunderbird firefox -y | tee -a $LOG
 
 # network 
-dnf install mtr -y
+dnf install mtr -y | tee -a $LOG
 
 # LibreOffice 
 dnf install libreoffice -y | tee -a $LOG
@@ -129,11 +129,12 @@ echo '<?xml version="1.0"?>
 #ssh-keygen -b 4096 
 
 # Font 
-dnf install freetype-freeworld -y
+dnf install freetype-freeworld -y | tee -a $LOG
 dnf install https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm -y | tee -a $LOG
 wget http://font.ubuntu.com/download/ubuntu-font-family-0.83.zip | tee -a $LOG
 unzip ubuntu-font-family-0.83.zip | tee -a $LOG
 mv ubuntu-font-family-0.83 /usr/share/fonts/ | tee -a $LOG
 wget https://github.com/downloads/adobe-fonts/source-code-pro/SourceCodePro_FontsOnly-1.013.zip | tee -a $LOG
 unzip SourceCodePro_FontsOnly-1.013.zip | tee -a $LOG
-mv SourceCodePro_FontsOnly-1.013 /usr/share/fonts/
+mv SourceCodePro_FontsOnly-1.013 /usr/share/fonts/ | tee -a $LOG
+
