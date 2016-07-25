@@ -145,3 +145,5 @@ xfconf-query -c xfce4-panel -p /plugins/plugin-1/button-icon -s "ibus-hangul"
 xfconf-query -c xfwm4 -p /general/theme -s "Bluebird"
 xfconf-query -c xsettings -p /Net/ThemeName -s "Glossy"
 
+# Disable Selinux. Enable setelah semua di testing ;)
+sed -i s/SELINUX=enforcing/SELINUX=disabled/g /etc/selinux/config 
