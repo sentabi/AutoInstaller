@@ -38,7 +38,7 @@ dnf install keepassx -y
 dnf install owncloud-client -y
 
 # install sublime 3
-wget https://download.sublimetext.com/sublime_text_3_build_3124_x64.tar.bz2
+wget https://download.sublimetext.com/sublime_text_3_build_3126_x64.tar.bz2
 tar jxvf sublime_text_3_build_*.tar.bz2
 mv sublime_text_3 /opt
 ln -s /opt/sublime_text_3/sublime_text /usr/bin/sublime
@@ -68,7 +68,7 @@ dnf install google-chrome-stable_current_x86_64.rpm -y
 dnf install thunderbird firefox -y
 
 # network 
-dnf install rsync htop rsnapshot vnstat mtr iperf curl -y
+dnf install rsync htop rsnapshot vnstat mtr iperf curl traceroute -y
 
 # LibreOffice 
 dnf install libreoffice -y
