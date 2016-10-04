@@ -14,7 +14,7 @@ rm -f /etc/localtime
 cp /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 
 # Hapus aplikasi yang ngga perlu 
-dnf remove transmission claws-mail* midori pidgin -y
+dnf remove transmission transmission* claws-mail* midori pidgin -y
 dnf remove abrt-* -y
 
 # RPM FUSION
