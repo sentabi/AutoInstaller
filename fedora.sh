@@ -49,7 +49,7 @@ dnf install xfce4-pulseaudio-plugin bluebird-gtk3-theme bluebird-gtk2-theme blue
 # codec multimedia
 dnf install  gstreamer-plugins-* gstreamer1-* ffmpeg youtube-dl -y
 # Multimedia Player
-dnf install vlc smplayer clementine -y
+dnf install vlc smplayer mplayer mpv clementine -y
 
 # VirtualBox
 wget http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo -O /etc/yum.repos.d/virtualbox.repo
