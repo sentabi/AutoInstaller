@@ -47,7 +47,7 @@ ln -s /opt/sublime_text_3/sublime_text /usr/bin/sublime
 dnf install xfce4-pulseaudio-plugin bluebird-gtk3-theme bluebird-gtk2-theme bluebird-xfwm4-theme y
 
 # codec multimedia
-dnf install  gstreamer-plugins-* gstreamer1-* ffmpeg youtube-dl -y
+dnf install libwbclient-devel gstreamer-plugins-* gstreamer1-* ffmpeg youtube-dl -y
 # Multimedia Player
 dnf install vlc smplayer mplayer mpv clementine -y
 
