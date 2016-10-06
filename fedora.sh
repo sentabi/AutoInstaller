@@ -123,6 +123,8 @@ echo '<?xml version="1.0"?>
  </match>
 </fontconfig>' > /home/$USER/.fonts.conf
 
+echo "Xft.lcdfilter: lcddefault" > /home/$USER/.Xresources
+
 ## Generate SSH Key
 # ssh-keygen -b 4096 
 
