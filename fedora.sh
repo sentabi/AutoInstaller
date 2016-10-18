@@ -14,7 +14,7 @@ rm -f /etc/localtime
 cp /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 
 # Hapus aplikasi yang ngga perlu 
-dnf remove transmission transmission* claws-mail* midori pidgin -y
+dnf remove transmission* claws-mail* midori pidgin -y
 dnf remove abrt-* -y
 
 # RPM FUSION
@@ -44,7 +44,7 @@ mv sublime_text_3 /opt
 ln -s /opt/sublime_text_3/sublime_text /usr/bin/sublime
 
 # XFCE
-dnf install xfce4-pulseaudio-plugin bluebird-gtk3-theme bluebird-gtk2-theme bluebird-xfwm4-theme y
+dnf install xfce4-pulseaudio-plugin bluebird-gtk3-theme bluebird-gtk2-theme bluebird-xfwm4-theme -y
 
 # codec multimedia
 dnf install libwbclient-devel gstreamer-plugins-* gstreamer1-* ffmpeg youtube-dl -y
