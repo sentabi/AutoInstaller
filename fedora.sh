@@ -17,6 +17,11 @@ cp /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 dnf remove transmission* claws-mail* midori pidgin -y
 dnf remove abrt-* -y
 
+# .bashrc
+wget https://raw.githubusercontent.com/sentabi/scripts/master/bashrc;
+rm -f /home/$USER/.bashrc;
+mv bashrc /home/$USER/.bashrc;
+source /home/$USER/.bashrc;
 # RPM FUSION
 dnf install http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
 
@@ -32,7 +37,7 @@ dnf install wget gimp inkscape vnstat terminator git puddletag pavucontrol tiger
 dnf install deluge -y
 
 # Password Manager 
-dnf install keepassx -y
+dnf install keepassx pwgen -y
 
 # ownCloud Client
 dnf install owncloud-client -y
