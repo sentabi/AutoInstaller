@@ -73,7 +73,7 @@ dnf install google-chrome-stable_current_x86_64.rpm -y
 dnf install thunderbird firefox -y
 
 # network 
-dnf install rsync htop rsnapshot vnstat mtr iperf curl traceroute -y
+dnf install rsync htop rsnapshot vnstat mtr iperf curl traceroute sysstat -y
 
 # LibreOffice 
 dnf install libreoffice -y
