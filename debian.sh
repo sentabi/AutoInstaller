@@ -10,25 +10,25 @@ echo "Hanya bisa dijalankan di Debian"
 exit
 fi
 
-#VERSION=$(sed 's/\..*//' /etc/debian_version)
+VERSION=$(sed 's/\..*//' /etc/debian_version)
 CODENAME=$(awk -F"[)(]+" '/VERSION=/ {print $2}' /etc/os-release)
-#if [ $VERSION -eq 8 ]
-#then
-#echo '
-#deb http://httpredir.debian.org/debian jessie main
-#deb http://httpredir.debian.org/debian jessie-updates main
-#deb http://security.debian.org/ jessie/updates main
-#' > /etc/apt/sources.list
-#fi
+if [ $VERSION -eq 8 ]
+then
+echo '
+deb http://httpredir.debian.org/debian jessie main
+deb http://httpredir.debian.org/debian jessie-updates main
+deb http://security.debian.org/ jessie/updates main
+' > /etc/apt/sources.list
+fi
 
-#if [ $VERSION -eq 7 ]
-#then
-#echo '
-#deb http://httpredir.debian.org/debian wheezy main
-#deb http://httpredir.debian.org/debian wheezy-updates main
-#deb http://security.debian.org/ wheezy/updates main
-#' > /etc/apt/sources.list
-#fi
+if [ $VERSION -eq 7 ]
+then
+echo '
+deb http://httpredir.debian.org/debian wheezy main
+deb http://httpredir.debian.org/debian wheezy-updates main
+deb http://security.debian.org/ wheezy/updates main
+' > /etc/apt/sources.list
+fi
 
 # hapus yang ngga perlu 
 apt-get purge exim4* rpcbind samba* -y  
@@ -62,9 +62,16 @@ source ~/.bashrc
 # Network Tools
 apt-get install rsync htop rsnapshot vnstat mtr iperf curl unzip wget dnsutils -y
 
-# LEMP 
-apt-get install nginx mysql-server php5 php5-common php5-gd php5-xmlrpc php5-fpm php5-curl php5-intl php5-mcrypt php5-imagick php5-mysqlnd -y
+# NGINX
+apt-get install nginx
 
+# MYSQL
+apt-get install mysql-server
+
+# PHP
+apt-get install php5 php5-common php5-gd php5-xmlrpc php5-fpm php5-curl php5-intl php5-mcrypt php5-imagick php5-mysqlnd -y
+
+# GIT
 apt-get install git -y
 
 # Composer 
