@@ -54,7 +54,7 @@ locale-gen en_US.UTF-8
 apt-get install bsdutils bash-completion nano dialog curl ca-certificates -y
 
 # OpenSSH
-apt-get install openssh-server
+apt-get install openssh-server -y
 
 # konfigurasi ulang OpenSSH server'
 dpkg-reconfigure openssh-server
@@ -66,10 +66,10 @@ source ~/.bashrc
 apt-get install rsync htop rsnapshot vnstat mtr iperf curl unzip wget dnsutils -y
 
 # NGINX
-apt-get install nginx
+apt-get install nginx -y
 
 # MYSQL
-apt-get install mysql-server
+apt-get install mysql-server -y
 
 # PHP
 apt-get install php5 php5-common php5-gd php5-xmlrpc php5-fpm php5-curl php5-intl php5-mcrypt php5-imagick php5-mysqlnd -y
