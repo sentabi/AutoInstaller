@@ -53,6 +53,9 @@ locale-gen en_US.UTF-8
 ### install ca-certificates biar wget ga protest ERROR: The certificate of xxxxxx
 apt-get install bsdutils bash-completion nano dialog curl ca-certificates -y
 
+# OpenSSH
+apt-get install openssh-server
+
 # konfigurasi ulang OpenSSH server'
 dpkg-reconfigure openssh-server
 ## PS1 
