@@ -63,7 +63,7 @@ echo 'PS1="\[\e[1;30m\][\[\e[1;33m\]\u@\H\[\e[1;30m\]\[\e[0;32m\]\[\e[1;30m\]] \
 source ~/.bashrc
 
 # Network Tools
-apt-get install rsync htop rsnapshot vnstat mtr iperf curl unzip wget dnsutils -y
+apt-get install rsync htop rsnapshot vnstat mtr iperf curl unzip wget dnsutils strace ltrace zip -y
 
 # NGINX
 apt-get install nginx -y
