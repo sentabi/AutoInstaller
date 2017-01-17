@@ -161,3 +161,13 @@ chmod 1777 /tmp
 echo "tmpfs   /tmp    tmpfs   rw,noexec,nosuid        0       0" >> /etc/fstab
 rm -rf /var/tmp
 ln -s /tmp /var/tmp
+
+# Batasi ukuran log systemd
+echo '
+Storage=persistent
+SystemMaxUse=400M
+SystemMaxFileSize=30M
+RuntimeMaxUse=250M
+RuntimeMaxFileSize=30M' >> /etc/systemd/journald.conf
+# restart systemd
+systemctl restart systemd-journald
