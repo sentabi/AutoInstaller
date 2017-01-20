@@ -31,7 +31,7 @@ dnf update -y
 dnf upgrade -y
 
 # install aplikasi
-dnf install wget gimp inkscape vnstat terminator git puddletag pavucontrol tigervnc shotwell nano wireshark nmap uget rfkill remmina remmina-plugins* openvpn -y
+dnf install wget gimp inkscape vnstat terminator git puddletag pavucontrol tigervnc shotwell nano wireshark lshw nmap uget rfkill remmina remmina-plugins* openvpn -y
 
 # Torrent Client 
 dnf install deluge -y
