@@ -30,8 +30,8 @@ deb http://security.debian.org/ wheezy/updates main
 ' > /etc/apt/sources.list
 fi
 
-# hapus yang ngga perlu 
-apt-get purge exim4* rpcbind samba* -y  
+# hapus yang ngga perlu
+apt-get purge exim4* rpcbind samba* -y
 
 # Repostory nginx
 wget -qO - http://nginx.org/keys/nginx_signing.key | apt-key add -
@@ -58,12 +58,12 @@ apt-get install openssh-server -y
 
 # konfigurasi ulang OpenSSH server'
 dpkg-reconfigure openssh-server
-## PS1 
+## PS1
 echo 'PS1="\[\e[1;30m\][\[\e[1;33m\]\u@\H\[\e[1;30m\]\[\e[0;32m\]\[\e[1;30m\]] \[\e[1;37m\]\w\[\e[0;37m\] \n\$ "' >> ~/.bashrc
 source ~/.bashrc
 
 # Network Tools
-apt-get install rsync htop rsnapshot vnstat mtr iperf curl unzip wget dnsutils strace ltrace zip -y
+apt-get install rsync htop rsnapshot vnstat mtr iperf curl unzip wget whois dnsutils strace ltrace zip -y
 
 # NGINX
 apt-get install nginx -y
@@ -77,7 +77,7 @@ apt-get install php5 php5-common php5-gd php5-xmlrpc php5-fpm php5-curl php5-int
 # GIT
 apt-get install git -y
 
-# Composer 
+# Composer
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/bin/composer
 
@@ -89,7 +89,7 @@ mount -t tmpfs -o rw,noexec,nosuid tmpfs /tmp
 chmod 1777 /tmp
 echo "tmpfs   /tmp    tmpfs   rw,noexec,nosuid        0       0" >> /etc/fstab
 rm -rf /var/tmp
-ln -s /tmp /var/tmp  
+ln -s /tmp /var/tmp
 
 ## Generate SSH Key
 ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa -q
