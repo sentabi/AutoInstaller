@@ -46,8 +46,13 @@ apt-get upgrade -y
 rm -f /etc/localtime
 cp /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 
-## ubah locale jadi US UTF8
-echo 'en_US.UTF-8 UTF-8' > /etc/locale.gen
+## tambah US UTF8 sama Indonesia
+## Biar format tanggal bisa menggunakan tanggal Indonesia
+echo '
+en_US.UTF-8 UTF-8
+id_ID ISO-8859-1
+id_ID.UTF-8 UTF-8
+' > /etc/locale.gen
 locale-gen en_US.UTF-8
 
 ### install ca-certificates biar wget ga protest ERROR: The certificate of xxxxxx
