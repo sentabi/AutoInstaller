@@ -35,12 +35,19 @@ yum install rsnapshot htop vnstat iperf -y
 rm -f /etc/localtime
 cp /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 
-yum install rsync htop mtr unzip whois strace ltrace zip traceroute bind-utils -y
+yum install rsync htop mtr curl unzip whois strace ltrace zip traceroute bind-utils -y
+
+# Install Utility
+yum install pwgen -y
+
+curl -sS https://getcomposer.org/installer | php
+mv composer.phar /usr/bin/composer
 
 yum install git -y
 
 yum install fail2ban sendmail -y
 
+# MariaDB
 yum install mariadb-server mariadb -y
 
 service mariadb start
