@@ -36,7 +36,7 @@ rm -f /etc/localtime
 cp /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 
 yum install rsync htop mtr unzip whois strace ltrace zip traceroute bind-utils -y
-
+yum install pwgen -y
 yum install git -y
 
 yum install fail2ban sendmail -y
