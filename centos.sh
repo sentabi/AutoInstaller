@@ -17,7 +17,6 @@ fi
 echo 'PS1="\[\e[1;30m\][\[\e[1;33m\]\u@\H\[\e[1;30m\]\[\e[0;32m\]\[\e[1;30m\]] \[\e[1;37m\]\w\[\e[0;37m\] \n\$ "' >> ~/.bashrc
 source ~/.bashrc
 
-
 # Generate SSH Key
 ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa -q
 
@@ -31,21 +30,29 @@ yum update -y
 yum install epel-release -y
 
 yum install rsnapshot htop vnstat iperf -y
+
 # zona waktu Jakarta
 rm -f /etc/localtime
 cp /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 
-yum install rsync htop mtr unzip whois strace ltrace zip traceroute bind-utils -y
+yum install rsync htop mtr curl unzip whois strace ltrace zip traceroute bind-utils -y
+
+# Install Utility
 yum install pwgen -y
+
+curl -sS https://getcomposer.org/installer | php
+mv composer.phar /usr/bin/composer
+
 yum install git -y
 
 yum install fail2ban sendmail -y
 
+# MariaDB
 yum install mariadb-server mariadb -y
 
-#service mariadb restart
-#mysql_secure_installation
-#service mariadb restart
+service mariadb start
+mysql_secure_installation
+service mariadb restart
 
-#rpm -Ivh http://rpms.remirepo.net/enterprise/remi-release-7.rpm
-#yum install php71 -y
+rpm -Ivh http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+yum install php71-php php71-php-cli php71-php-common php71-php-json php71-php-intl php71-php-mbstring php71-php-mcrypt php71-php-mysqlnd php71-php-pdo php71-php-tidy php71-php-xml php71-php-fpm php71-php-gd -y
