@@ -58,6 +58,9 @@ locale-gen en_US.UTF-8
 ### install ca-certificates biar wget ga protest ERROR: The certificate of xxxxxx
 apt-get install bsdutils bash-completion nano dialog curl ca-certificates -y
 
+# nano Syntax highlight
+find /usr/share/nano/ -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc
+
 # OpenSSH
 apt-get install openssh-server -y
 
@@ -67,6 +70,8 @@ dpkg-reconfigure openssh-server
 echo 'PS1="\[\e[1;30m\][\[\e[1;33m\]\u@\H\[\e[1;30m\]\[\e[0;32m\]\[\e[1;30m\]] \[\e[1;37m\]\w\[\e[0;37m\] \n\$ "' >> ~/.bashrc
 source ~/.bashrc
 
+# SSH
+echo "UseDNS no" >> /etc/ssh/sshd_config
 # Network Tools
 apt-get install rsync htop rsnapshot vnstat mtr iperf curl unzip wget whois dnsutils strace ltrace zip -y
 

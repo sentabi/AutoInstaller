@@ -29,7 +29,7 @@ yum update -y
 
 yum install epel-release -y
 
-yum install rsnapshot htop vnstat iperf -y
+yum install bash-completionrsnapshot htop vnstat iperf -y
 
 # zona waktu Jakarta
 rm -f /etc/localtime
@@ -54,5 +54,33 @@ service mariadb start
 mysql_secure_installation
 service mariadb restart
 
-rpm -Ivh http://rpms.remirepo.net/enterprise/remi-release-7.rpm
-yum install php71-php php71-php-cli php71-php-common php71-php-json php71-php-intl php71-php-mbstring php71-php-mcrypt php71-php-mysqlnd php71-php-pdo php71-php-tidy php71-php-xml php71-php-fpm php71-php-gd -y
+wget http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+yum install remi-release-7.rpm -y
+yum install php71-php php71-php-cli php71-php-common php71-php-json php71-php-intl php71-php-mbstring php71-php-mcrypt php71-php-mysqlnd php71-php-pdo php71-php-tidy php71-php-xml php71-php-fpm -y
+
+# nginx
+echo '
+[nginx.org]
+name=nginx.org repo
+baseurl=http://nginx.org/packages/centos/7/$basearch/
+gpgcheck=1
+enabled=1
+' > /etc/yum.repos.d/nginx.repo;
+
+yum install nginx -y
+
+sed -i 's/user = apache/user = nginx/g' /etc/opt/remi/php71/php-fpm.d/www.conf
+sed -i 's/group = apache/user = nginx/g' /etc/opt/remi/php71/php-fpm.d/www.conf
+sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/opt/remi/php71/php.ini
+sed -i 's/;date.timezone =/date.timezone = Asia\/Jakarta/g' /etc/opt/remi/php71/php.ini
+
+# SSH
+echo 'UseDNS no' >> /etc/ssh/sshd_config
+
+systemctl enable nginx
+systemctl enable mariadb
+systemctl enable php71-php-fpm
+
+systemctl start nginx
+systemctl start mariadb
+systemctl start php71-php-fpm

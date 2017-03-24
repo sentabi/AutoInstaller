@@ -33,7 +33,11 @@ dnf upgrade -y
 # install aplikasi
 dnf install wget gimp inkscape vnstat terminator git puddletag pavucontrol tigervnc shotwell nano wireshark lshw nmap uget rfkill remmina remmina-plugins* openvpn -y
 
-# Torrent Client 
+# nano Syntax highlight
+find /usr/share/nano/ -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc
+
+
+# Torrent Client
 dnf install deluge -y
 
 # Password Manager 
@@ -171,3 +175,6 @@ RuntimeMaxUse=250M
 RuntimeMaxFileSize=30M' >> /etc/systemd/journald.conf
 # restart systemd
 systemctl restart systemd-journald
+
+# SSH
+echo "UseDNS no" >> /etc/ssh/sshd_config
