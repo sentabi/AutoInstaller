@@ -59,6 +59,14 @@ locale-gen en_US.UTF-8
 apt-get install bsdutils bash-completion nano dialog curl ca-certificates -y
 
 # nano Syntax highlight
+echo '
+set autoindent
+syntax "comments" ".*"
+color blue "^#.*"
+set morespace
+include /usr/share/nano/nginx.nanorc
+' >> ~/.nanorc
+wget https://raw.githubusercontent.com/scopatz/nanorc/master/nginx.nanorc -O /usr/share/nano/nginx.nanorc
 find /usr/share/nano/ -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc
 
 # OpenSSH

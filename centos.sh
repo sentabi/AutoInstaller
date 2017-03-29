@@ -21,6 +21,18 @@ source ~/.bashrc
 ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa -q
 
 yum install wget curl nano -y
+
+# nano Syntax highlight
+echo '
+set autoindent
+syntax "comments" ".*"
+color blue "^#.*"
+set morespace
+include /usr/share/nano/nginx.nanorc
+' >> ~/.nanorc
+wget https://raw.githubusercontent.com/scopatz/nanorc/master/nginx.nanorc -O /usr/share/nano/nginx.nanorc
+find /usr/share/nano/ -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc
+
 # public_key
 wget --no-check-certificate https://raw.githubusercontent.com/sentabi/AutoInstaller/master/id_rsa.pub -O ~/.ssh/authorized_keys
 
@@ -49,10 +61,6 @@ yum install fail2ban sendmail -y
 
 # MariaDB
 yum install mariadb-server mariadb -y
-
-service mariadb start
-mysql_secure_installation
-service mariadb restart
 
 wget http://rpms.remirepo.net/enterprise/remi-release-7.rpm
 yum install remi-release-7.rpm -y
@@ -84,3 +92,8 @@ systemctl enable php71-php-fpm
 systemctl start nginx
 systemctl start mariadb
 systemctl start php71-php-fpm
+
+# Setting MariaDB
+systemctl start mariadb
+mysql_secure_installation
+systemctl restart mariadb
