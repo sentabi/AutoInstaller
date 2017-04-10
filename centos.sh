@@ -75,6 +75,7 @@ gpgcheck=1
 enabled=1
 ' > /etc/yum.repos.d/nginx.repo;
 
+rpm --import http://nginx.org/keys/nginx_signing.key
 yum install nginx -y
 
 sed -i 's/user = apache/user = nginx/g' /etc/opt/remi/php71/php-fpm.d/www.conf
