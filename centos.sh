@@ -41,7 +41,7 @@ yum update -y
 
 yum install epel-release -y
 
-yum install bash-completionrsnapshot htop vnstat iperf -y
+yum install bash-completion net-tools rsnapshot htop vnstat iperf -y
 
 # zona waktu Jakarta
 rm -f /etc/localtime
