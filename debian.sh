@@ -90,7 +90,7 @@ apt-get install nginx -y
 apt-get install mysql-server -y
 
 # PHP
-apt-get install php5 php5-common php5-gd php5-xmlrpc php5-fpm php5-curl php5-intl php5-mcrypt php5-imagick php5-mysqlnd -y
+apt-get install php5 php5-cli php5-common php5-gd php5-xmlrpc php5-fpm php5-curl php5-intl php5-mcrypt php5-imagick php5-mysqlnd -y
 
 # GIT
 apt-get install git -y
