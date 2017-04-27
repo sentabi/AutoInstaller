@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
- 
-## Fedora 22/23 64 bit
-## jangan asal di jalankan, liat dulu scriptna untuk menghindari hal-hal yang tidak 
+## jangan asal di jalankan, liat dulu scriptna untuk menghindari hal-hal yang tidak
 ## diinginkan
 
 if [ "$(id -u)" != "0" ]; then
@@ -13,7 +11,7 @@ fi
 rm -f /etc/localtime
 cp /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 
-# Hapus aplikasi yang ngga perlu 
+# Hapus aplikasi yang ngga perlu
 dnf remove transmission* claws-mail* midori pidgin -y
 dnf remove abrt-* -y
 
@@ -22,8 +20,9 @@ wget https://raw.githubusercontent.com/sentabi/scripts/master/bashrc;
 rm -f /home/$USER/.bashrc;
 mv bashrc /home/$USER/.bashrc;
 source /home/$USER/.bashrc;
-# RPM FUSION
+# 3rd party repo
 dnf install http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
+dnf install https://rpms.remirepo.net/fedora/remi-release-$(rpm -E %fedora).rpm
 
 # Update Repo dan Upgrade
 dnf clean all
@@ -36,11 +35,10 @@ dnf install wget gimp inkscape vnstat terminator git puddletag pavucontrol tiger
 # nano Syntax highlight
 find /usr/share/nano/ -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc
 
-
 # Torrent Client
 dnf install deluge -y
 
-# Password Manager 
+# Password Manager
 dnf install keepassx pwgen -y
 
 # ownCloud Client
@@ -65,7 +63,7 @@ wget http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo -O /et
 wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | rpm --import -
 dnf install gcc make dkms kernel-devel-$(uname -r) kernel-headers VirtualBox-5.1 -y
 
-# ekstrator 
+# ekstrator
 dnf install file-roller-nautilus file-roller unzip unrar p7zip unrar -y
 
 # Mount Android/Samba
@@ -76,16 +74,16 @@ wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
 dnf install google-chrome-stable_current_x86_64.rpm -y
 dnf install thunderbird firefox -y
 
-# network 
+# network
 dnf install rsync htop rsnapshot vnstat mtr iperf curl traceroute sysstat -y
 
-# LibreOffice 
+# LibreOffice
 dnf install libreoffice -y
- 
+
 ## LAMP untu Web Development
 dnf install httpd mariadb mariadb-server php php-pdo phpMyAdmin php-cli php-mysqlnd php-mcrypt php-xml -y
 
-### Install Composer 
+### Install Composer
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/bin/composer
 
@@ -101,7 +99,7 @@ echo '<?xml version="1.0"?>
 </fontconfig>' > /etc/fonts/conf.d/99-autohinter-only.conf
 ln -s /etc/fonts/conf.avail/10-autohint.conf /etc/fonts/conf.d/
 ln -s /etc/fonts/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d/
- 
+
 echo '<?xml version="1.0"?>
 <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
 <fontconfig>
@@ -135,9 +133,9 @@ echo '<?xml version="1.0"?>
 echo "Xft.lcdfilter: lcddefault" > /home/$USER/.Xresources
 
 ## Generate SSH Key
-# ssh-keygen -b 4096 
+# ssh-keygen -b 4096
 
-# Font 
+# Font
 dnf install freetype-freeworld -y
 dnf install https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm -y
 wget http://font.ubuntu.com/download/ubuntu-font-family-0.83.zip
@@ -147,14 +145,14 @@ wget https://github.com/downloads/adobe-fonts/source-code-pro/SourceCodePro_Font
 unzip SourceCodePro_FontsOnly-1.013.zip
 mv SourceCodePro_FontsOnly-1.013 /usr/share/fonts/
 
-# Tweak XFCE 
+# Tweak XFCE
 xfconf-query -c xfce4-panel -p /plugins/plugin-1/show-button-title -s "false"
 xfconf-query -c xfce4-panel -p /plugins/plugin-1/button-icon -s "ibus-hangul"
 xfconf-query -c xfwm4 -p /general/theme -s "Bluebird"
 xfconf-query -c xsettings -p /Net/ThemeName -s "Glossy"
 
 # Disable Selinux. Enable setelah semua di testing ;)
-sed -i s/SELINUX=enforcing/SELINUX=disabled/g /etc/selinux/config 
+sed -i s/SELINUX=enforcing/SELINUX=disabled/g /etc/selinux/config
 
 # Mengamankan /tmp
 cd ~
