@@ -22,7 +22,7 @@ mv bashrc /home/$USER/.bashrc;
 source /home/$USER/.bashrc;
 # 3rd party repo
 dnf install http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
-dnf install https://rpms.remirepo.net/fedora/remi-release-$(rpm -E %fedora).rpm
+dnf install https://rpms.remirepo.net/fedora/remi-release-$(rpm -E %fedora).rpm -y
 
 # Update Repo dan Upgrade
 dnf clean all
