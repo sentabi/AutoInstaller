@@ -80,6 +80,9 @@ dnf install rsync htop rsnapshot vnstat mtr iperf curl traceroute sysstat -y
 # LibreOffice
 dnf install libreoffice -y
 
+# DLL
+dnf install xclip -y
+
 ## LAMP untu Web Development
 dnf install httpd mariadb mariadb-server php php-pdo phpMyAdmin php-cli php-mysqlnd php-mcrypt php-xml -y
 
