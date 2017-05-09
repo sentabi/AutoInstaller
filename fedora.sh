@@ -64,7 +64,7 @@ wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | rpm --import -
 dnf install gcc make dkms kernel-devel-$(uname -r) kernel-headers VirtualBox-5.1 -y
 
 # ekstrator
-dnf install file-roller-nautilus file-roller unzip unrar p7zip unrar -y
+dnf install file-roller unzip unrar p7zip unrar -y
 
 # Mount Android/Samba
 dnf install libmtp-devel libmtp gvfs-mtp simple-mtpfs libusb gvfs-client gvfs-smb gvfs-fuse gigolo -y
