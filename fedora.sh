@@ -7,6 +7,7 @@ if [ "$(id -u)" != "0" ]; then
    exit 1
 fi
 
+dnf install wget -y
 # Zona waktu WIB
 rm -f /etc/localtime
 cp /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
@@ -25,12 +26,10 @@ dnf install http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(
 dnf install https://rpms.remirepo.net/fedora/remi-release-$(rpm -E %fedora).rpm -y
 
 # Update Repo dan Upgrade
-dnf clean all
-dnf update -y
 dnf upgrade -y
 
 # install aplikasi
-dnf install wget gimp inkscape vnstat terminator git puddletag pavucontrol tigervnc shotwell nano wireshark lshw nmap uget rfkill remmina remmina-plugins* openvpn -y
+dnf install aria2 gimp inkscape vnstat terminator git puddletag pavucontrol tigervnc shotwell nano wireshark lshw nmap uget rfkill remmina remmina-plugins* openvpn -y
 
 # nano Syntax highlight
 find /usr/share/nano/ -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc
