@@ -80,6 +80,27 @@ dnf install rsync htop rsnapshot vnstat mtr iperf curl traceroute sysstat -y
 # LibreOffice
 dnf install libreoffice -y
 
+# Telegram
+cd /opt;
+wget --content-disposition https://tdesktop.com/linux
+tar xJvf tsetup.*.tar.xz
+ln -s /opt/Telegram/Telegram /usr/bin/telegram
+# Shortcut Telegram
+echo '[Desktop Entry]
+Version=1.0
+Name=Telegram Desktop
+Comment=Official desktop version of Telegram messaging app
+TryExec=
+Exec=telegram %u
+Icon=telegram
+Terminal=false
+StartupWMClass=TelegramDesktop
+Type=Application
+Categories=Network;InstantMessaging;Qt;
+MimeType=x-scheme-handler/tg;
+X-Desktop-File-Install-Version=0.23' > /home/$USER/.local/share/applications/telegramdesktop.desktop
+
+
 # DLL
 dnf install xclip -y
 
