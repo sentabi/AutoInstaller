@@ -62,6 +62,8 @@ wget http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo -O /et
 wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | rpm --import -
 dnf install gcc make dkms kernel-devel-$(uname -r) kernel-headers VirtualBox-5.1 -y
 
+usermod -a -G vboxusers $USER
+
 # ekstrator
 dnf install file-roller unzip unrar p7zip unrar -y
 
