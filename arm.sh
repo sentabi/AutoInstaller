@@ -17,6 +17,8 @@ apt-get update
 apt-get upgrade -y
 
 # update timezone  Jakarta
+rm -f /etc/localtime
+cp /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 echo "Asia/Jakarta" > /etc/timezone
 dpkg-reconfigure -f noninteractive tzdata
 
