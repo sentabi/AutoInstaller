@@ -33,6 +33,11 @@ fi
 # hapus yang ngga perlu
 apt-get purge exim4* rpcbind samba* -y
 
+# Repository SURY
+apt-get install apt-transport-https lsb-release ca-certificates -y
+wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
+
 # Repostory nginx
 wget -qO - http://nginx.org/keys/nginx_signing.key | apt-key add -
 echo 'deb http://nginx.org/packages/mainline/debian/ '$CODENAME' nginx' >> /etc/apt/sources.list
@@ -89,9 +94,8 @@ apt-get install nginx -y
 # MYSQL
 apt-get install mysql-server -y
 
-# PHP
-apt-get install php5 php5-cli php5-common php5-gd php5-xmlrpc php5-fpm php5-curl php5-intl php5-mcrypt php5-imagick php5-mysqlnd -y
-
+# PHP 7
+apt-get install php7.1 php7.1-cli php7.1-common php7.1-gd php7.1-xmlrpc php7.1-fpm php7.1-curl php7.1-intl php7.1-mcrypt php7.1-imagick php7.1-mysqlnd php7.1-zip php7.1-xml php7.1-mbstring  -y
 # GIT
 apt-get install git -y
 
