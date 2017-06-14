@@ -57,7 +57,7 @@ source ~/.bashrc
 echo "UseDNS no" >> /etc/ssh/sshd_config
 
 # Network Tools
-apt-get install rsync htop rsnapshot vnstat mtr iperf curl unzip openvpn whois dnsutils strace ltrace zip -y
+apt-get install rsync htop rsnapshot vnstat mtr iperf curl unzip openvpn whois dnsutils traceroute strace ltrace zip -y
 
 # Generate SSH Key
 ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa -q
