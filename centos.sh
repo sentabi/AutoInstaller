@@ -52,9 +52,6 @@ yum install rsync htop mtr curl unzip whois strace ltrace zip traceroute bind-ut
 # Install Utility
 yum install pwgen -y
 
-curl -sS https://getcomposer.org/installer | php
-mv composer.phar /usr/bin/composer
-
 yum install git -y
 
 yum install fail2ban sendmail -y
@@ -62,9 +59,14 @@ yum install fail2ban sendmail -y
 # MariaDB
 yum install mariadb-server mariadb -y
 
+# PHP71
 wget http://rpms.remirepo.net/enterprise/remi-release-7.rpm
 yum install remi-release-7.rpm -y
 yum install php71-php php71-php-cli php71-php-common php71-php-json php71-php-intl php71-php-mbstring php71-php-mcrypt php71-php-mysqlnd php71-php-pdo php71-php-tidy php71-php-xml php71-php-fpm -y
+
+# Composer
+curl -sS https://getcomposer.org/installer | php71
+mv composer.phar /usr/bin/composer
 
 # nginx
 echo '
