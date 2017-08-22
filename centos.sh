@@ -24,7 +24,7 @@ yum install wget curl nano -y
 
 # nano Syntax highlight
 echo '
-set autoindent
+#set autoindent
 syntax "comments" ".*"
 color blue "^#.*"
 set morespace
@@ -101,3 +101,4 @@ systemctl start php71-php-fpm
 systemctl start mariadb
 mysql_secure_installation
 systemctl restart mariadb
+yum update -y
