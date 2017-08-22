@@ -35,6 +35,7 @@ find /usr/share/nano/ -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc
 
 # public_key
 wget --no-check-certificate https://raw.githubusercontent.com/sentabi/AutoInstaller/master/id_rsa.pub -O ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
 
 yum clean all
 yum update -y
