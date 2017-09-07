@@ -48,13 +48,15 @@ yum install bash-completion net-tools rsnapshot htop vnstat iperf -y
 rm -f /etc/localtime
 cp /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 
-yum install rsync htop mtr curl unzip whois strace ltrace zip traceroute bind-utils -y
+# otomatis sync waktu
+yum install chrony
+systemctl start chronyd
+systemctl enable chronyd
 
 # Install Utility
+yum install rsync htop mtr curl unzip whois strace ltrace zip traceroute bind-utils -y
 yum install pwgen -y
-
 yum install git -y
-
 yum install fail2ban sendmail -y
 
 # MariaDB
