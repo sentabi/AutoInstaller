@@ -8,9 +8,14 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 dnf install wget -y
-# Zona waktu WIB
+
+# Sinkronisasi Zona waktu WIB
 rm -f /etc/localtime
 cp /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
+
+dnf install chrony -y
+systemctl enable chronyd
+systemctl start chronyd
 
 # Hapus aplikasi yang ngga perlu
 dnf remove transmission* claws-mail* midori pidgin -y
@@ -21,6 +26,7 @@ wget https://raw.githubusercontent.com/sentabi/scripts/master/bashrc;
 rm -f /home/$USER/.bashrc;
 mv bashrc /home/$USER/.bashrc;
 source /home/$USER/.bashrc;
+
 # 3rd party repo
 dnf install http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
 dnf install https://rpms.remirepo.net/fedora/remi-release-$(rpm -E %fedora).rpm -y
@@ -44,7 +50,7 @@ dnf install keepassx pwgen -y
 dnf install owncloud-client -y
 
 # install sublime 3
-wget https://download.sublimetext.com/sublime_text_3_build_3126_x64.tar.bz2
+wget https://download.sublimetext.com/sublime_text_3_build_3143_x64.tar.bz2
 tar jxvf sublime_text_3_build_*.tar.bz2
 mv sublime_text_3 /opt
 ln -s /opt/sublime_text_3/sublime_text /usr/bin/sublime
@@ -54,6 +60,7 @@ dnf install xfce4-pulseaudio-plugin bluebird-gtk3-theme bluebird-gtk2-theme blue
 
 # codec multimedia
 dnf install libwbclient-devel gstreamer-plugins-* gstreamer1-* ffmpeg youtube-dl -y
+
 # Multimedia Player
 dnf install vlc smplayer mplayer mpv clementine -y
 
@@ -75,42 +82,21 @@ wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
 dnf install google-chrome-stable_current_x86_64.rpm -y
 dnf install thunderbird firefox -y
 
-# network
-dnf install rsync htop rsnapshot vnstat mtr iperf curl traceroute sysstat -y
+# Utility
+yum install rsync htop mtr rsnapshot curl vnstat unzip whois iperf curl strace sysstat ltrace zip traceroute bind-utils -y
 
 # LibreOffice
 dnf install libreoffice -y
 
 # Telegram
+# Telegram otomatis membuat shortcut, jadi tidak perlu dibuat lagi
 cd /opt;
 wget --content-disposition https://tdesktop.com/linux
 tar xJvf tsetup.*.tar.xz
 ln -s /opt/Telegram/Telegram /usr/bin/telegram
-# Shortcut Telegram
-echo '[Desktop Entry]
-Version=1.0
-Name=Telegram Desktop
-Comment=Official desktop version of Telegram messaging app
-TryExec=
-Exec=telegram %u
-Icon=telegram
-Terminal=false
-StartupWMClass=TelegramDesktop
-Type=Application
-Categories=Network;InstantMessaging;Qt;
-MimeType=x-scheme-handler/tg;
-X-Desktop-File-Install-Version=0.23' > /home/$USER/.local/share/applications/telegramdesktop.desktop
-
 
 # DLL
 dnf install xclip -y
-
-## LAMP untu Web Development
-dnf install httpd mariadb mariadb-server php php-pdo phpMyAdmin php-cli php-mysqlnd php-mcrypt php-xml -y
-
-### Install Composer
-curl -sS https://getcomposer.org/installer | php
-mv composer.phar /usr/bin/composer
 
 ## Font Rendering
 echo '<?xml version="1.0"?>
@@ -201,3 +187,18 @@ systemctl restart systemd-journald
 
 # SSH
 echo "UseDNS no" >> /etc/ssh/sshd_config
+
+## LAMP untu Web Development
+dnf install httpd mariadb mariadb-server php php-pdo phpMyAdmin php-cli php-mysqlnd php-mcrypt php-xml -y
+
+# Setting MariaDB
+systemctl start mariadb
+mysql_secure_installation
+systemctl restart mariadb
+
+# setting login permanen phpmyadmin di localhost
+# https://jaranguda.com/login-permanent-phpmyadmin/
+
+## Install Composer
+curl -sS https://getcomposer.org/installer | php
+mv composer.phar /usr/bin/composer
