@@ -31,6 +31,9 @@ source /home/$USER/.bashrc;
 dnf install http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
 dnf install https://rpms.remirepo.net/fedora/remi-release-$(rpm -E %fedora).rpm -y
 
+
+dnf install kernel-devel kernel-headers gcc make dkms acpid libglvnd-glx libglvnd-opengl libglvnd-devel pkgconfig
+
 # Update Repo dan Upgrade
 dnf upgrade -y
 
@@ -44,35 +47,48 @@ find /usr/share/nano/ -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc
 dnf install deluge -y
 
 # Password Manager
-dnf install keepassx pwgen -y
+dnf install keepassxc pwgen -y
 
 # ownCloud Client
+dnf config-manager --add-repo https://download.opensuse.org/repositories/isv:ownCloud:desktop/Fedora_26/isv:ownCloud:desktop.repo
 dnf install owncloud-client -y
 
 # install sublime 3
-wget https://download.sublimetext.com/sublime_text_3_build_3143_x64.tar.bz2
-tar jxvf sublime_text_3_build_*.tar.bz2
-mv sublime_text_3 /opt
-ln -s /opt/sublime_text_3/sublime_text /usr/bin/sublime
-
+FOLDERSUBLIME=/opt/sublime_text_3
+if [ ! -d "$FOLDERSUBLIME" ]
+    then
+        wget https://download.sublimetext.com/sublime_text_3_build_3143_x64.tar.bz2
+        tar jxvf sublime_text_3_build_*.tar.bz2
+        mv sublime_text_3 /opt
+        ln -s /opt/sublime_text_3/sublime_text /usr/bin/sublime
+        rm -fr sublime_text
+    else
+        echo "Folder $FOLDERSUBLIME sudah ada. Instalasi sublime gagal."
+fi
 # XFCE
 dnf install xfce4-pulseaudio-plugin bluebird-gtk3-theme bluebird-gtk2-theme bluebird-xfwm4-theme -y
 
 # codec multimedia
-dnf install libwbclient-devel gstreamer-plugins-* gstreamer1-* ffmpeg youtube-dl -y
+dnf install libwbclient-devel gstreamer-plugins-* gstreamer1-* ffmpeg -y
+
+# Downloader Youtube
+wget https://yt-dl.org/downloads/latest/youtube-dl -O /usr/local/bin/youtube-dl
+chmod a+rx /usr/local/bin/youtube-dl
 
 # Multimedia Player
 dnf install vlc smplayer mplayer mpv clementine -y
 
 # VirtualBox
-wget http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo -O /etc/yum.repos.d/virtualbox.repo
-wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | rpm --import -
-dnf install gcc make dkms kernel-devel-$(uname -r) kernel-headers VirtualBox-5.1 -y
-
-usermod -a -G vboxusers $USER
-
+FILEREPOVIRTUALBOX=/etc/yum.repos.d/virtualbox.repo
+if [ ! -f "$FILEREPOVIRTUALBOX" ]
+    then
+        wget http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo -O /etc/yum.repos.d/virtualbox.repo
+        wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | rpm --import -
+        dnf install VirtualBox-5.1 -y
+        usermod -a -G vboxusers $USER
+fi
 # ekstrator
-dnf install file-roller unzip unrar p7zip unrar -y
+dnf install file-roller unzip p7zip unrar -y
 
 # Mount Android/Samba
 dnf install libmtp-devel libmtp gvfs-mtp simple-mtpfs libusb gvfs-client gvfs-smb gvfs-fuse gigolo -y
@@ -80,6 +96,7 @@ dnf install libmtp-devel libmtp gvfs-mtp simple-mtpfs libusb gvfs-client gvfs-sm
 # Browser dan Email Client
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
 dnf install google-chrome-stable_current_x86_64.rpm -y
+rm -f google-chrome-stable_current_x86_64.rpm
 dnf install thunderbird firefox -y
 
 # Utility
@@ -94,6 +111,7 @@ cd /opt;
 wget --content-disposition https://tdesktop.com/linux
 tar xJvf tsetup.*.tar.xz
 ln -s /opt/Telegram/Telegram /usr/bin/telegram
+rm -fr tsetup.*.tar.xz
 
 # DLL
 dnf install xclip -y
@@ -155,6 +173,7 @@ mv ubuntu-font-family-0.83 /usr/share/fonts/
 wget https://github.com/downloads/adobe-fonts/source-code-pro/SourceCodePro_FontsOnly-1.013.zip
 unzip SourceCodePro_FontsOnly-1.013.zip
 mv SourceCodePro_FontsOnly-1.013 /usr/share/fonts/
+rm -fr SourceCodePro_FontsOnly* ubuntu-font-family-*
 
 # Tweak XFCE
 xfconf-query -c xfce4-panel -p /plugins/plugin-1/show-button-title -s "false"
@@ -166,14 +185,14 @@ xfconf-query -c xsettings -p /Net/ThemeName -s "Glossy"
 sed -i s/SELINUX=enforcing/SELINUX=disabled/g /etc/selinux/config
 
 # Mengamankan /tmp
-cd ~
-rm -rf /tmp
-mkdir /tmp
-mount -t tmpfs -o rw,noexec,nosuid tmpfs /tmp
-chmod 1777 /tmp
-echo "tmpfs   /tmp    tmpfs   rw,noexec,nosuid        0       0" >> /etc/fstab
-rm -rf /var/tmp
-ln -s /tmp /var/tmp
+# cd ~
+# rm -rf /tmp
+# mkdir /tmp
+# mount -t tmpfs -o rw,noexec,nosuid tmpfs /tmp
+# chmod 1777 /tmp
+# echo "tmpfs   /tmp    tmpfs   rw,noexec,nosuid        0       0" >> /etc/fstab
+# rm -rf /var/tmp
+# ln -s /tmp /var/tmp
 
 # Batasi ukuran log systemd
 echo '
@@ -190,6 +209,12 @@ echo "UseDNS no" >> /etc/ssh/sshd_config
 
 ## LAMP untu Web Development
 dnf install httpd mariadb mariadb-server php php-pdo phpMyAdmin php-cli php-mysqlnd php-mcrypt php-xml -y
+
+# Buat baru file /var/tmp
+# Biar ga error https://jaranguda.com/solusi-mariadb-failed-at-step-namespace-spawning/
+rm -fr /var/tmp
+mkdir /var/tmp
+chmod 1777 /var/tmp
 
 # Setting MariaDB
 systemctl start mariadb
