@@ -87,6 +87,12 @@ sed -i 's/user = apache/user = nginx/g' /etc/opt/remi/php71/php-fpm.d/www.conf
 sed -i 's/group = apache/user = nginx/g' /etc/opt/remi/php71/php-fpm.d/www.conf
 sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/opt/remi/php71/php.ini
 sed -i 's/;date.timezone =/date.timezone = Asia\/Jakarta/g' /etc/opt/remi/php71/php.ini
+sed -i "s/\memory_limit = .*/memory_limit = 1024M/" /etc/opt/remi/php71/php.ini
+
+# listen = /run/php/php7.0-fpm.sock
+# listen.owner = nginx
+# listen.group = nginx
+# listen.mode = 0660
 
 # SSH
 echo 'UseDNS no' >> /etc/ssh/sshd_config
