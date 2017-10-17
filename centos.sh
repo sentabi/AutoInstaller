@@ -49,7 +49,7 @@ rm -f /etc/localtime
 cp /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 
 # otomatis sync waktu
-yum install chrony
+yum install chrony -y
 systemctl start chronyd
 systemctl enable chronyd
 
@@ -77,6 +77,7 @@ yum install php71-php php71-php-cli php71-php-common php71-php-json php71-php-in
 # Composer
 curl -sS https://getcomposer.org/installer | php71
 mv composer.phar /usr/bin/composer
+ln -s /usr/bin/php71 /usr/local/bin/php
 
 # nginx
 echo '

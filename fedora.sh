@@ -32,7 +32,7 @@ dnf install http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(
 dnf install https://rpms.remirepo.net/fedora/remi-release-$(rpm -E %fedora).rpm -y
 
 
-dnf install kernel-devel kernel-headers gcc make dkms acpid libglvnd-glx libglvnd-opengl libglvnd-devel pkgconfig
+dnf install kernel-devel kernel-headers gcc make dkms acpid libglvnd-glx libglvnd-opengl libglvnd-devel pkgconfig -y
 
 # Update Repo dan Upgrade
 dnf upgrade -y
