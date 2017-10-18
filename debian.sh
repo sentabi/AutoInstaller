@@ -10,25 +10,10 @@ echo "Hanya bisa dijalankan di Debian"
 exit
 fi
 
-VERSION=$(sed 's/\..*//' /etc/debian_version)
-CODENAME=$(awk -F"[)(]+" '/VERSION=/ {print $2}' /etc/os-release)
-if [ $VERSION -eq 8 ]
-then
-echo '
-deb http://httpredir.debian.org/debian jessie main
-deb http://httpredir.debian.org/debian jessie-updates main
-deb http://security.debian.org/ jessie/updates main
-' > /etc/apt/sources.list
-fi
 
-if [ $VERSION -eq 7 ]
-then
-echo '
-deb http://httpredir.debian.org/debian wheezy main
-deb http://httpredir.debian.org/debian wheezy-updates main
-deb http://security.debian.org/ wheezy/updates main
-' > /etc/apt/sources.list
-fi
+VERSION=$(sed 's/\..*//' /etc/debian_version)
+# CODENAME atau $(lsb_release -sc)
+CODENAME=$(awk -F"[)(]+" '/VERSION=/ {print $2}' /etc/os-release)
 
 # hapus yang ngga perlu
 apt-get purge exim4* rpcbind samba* -y
@@ -40,7 +25,7 @@ echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sou
 
 # Repostory nginx
 wget -qO - http://nginx.org/keys/nginx_signing.key | apt-key add -
-echo 'deb http://nginx.org/packages/mainline/debian/ '$CODENAME' nginx' >> /etc/apt/sources.list
+echo 'deb http://nginx.org/packages/mainline/debian/ $(lsb_release -sc) nginx' >> /etc/apt/sources.list
 
 ## update repository dan sistem
 apt-get clean all
@@ -65,7 +50,7 @@ apt-get install bsdutils bash-completion nano dialog curl ca-certificates -y
 
 # nano Syntax highlight
 echo '
-set autoindent
+#set autoindent
 syntax "comments" ".*"
 color blue "^#.*"
 set morespace
@@ -92,10 +77,11 @@ apt-get install rsync htop rsnapshot vnstat mtr iperf curl unzip wget whois dnsu
 apt-get install nginx -y
 
 # MYSQL
-apt-get install mysql-server -y
+apt-get install mariadb-server mariadb-client -y
 
 # PHP 7
 apt-get install php7.1 php7.1-cli php7.1-common php7.1-gd php7.1-xmlrpc php7.1-fpm php7.1-curl php7.1-intl php7.1-mcrypt php7.1-imagick php7.1-mysqlnd php7.1-zip php7.1-xml php7.1-mbstring  -y
+
 # GIT
 apt-get install git -y
 
