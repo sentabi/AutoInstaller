@@ -35,7 +35,7 @@ apt-get upgrade -y
 ### update timezone  Jakarta
 rm -f /etc/localtime
 cp /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
-echo 'Asia/Jakarta' /etc/timezone
+echo 'Asia/Jakarta' > /etc/timezone
 
 ## tambah US UTF8 sama Indonesia
 ## Biar format tanggal bisa menggunakan tanggal Indonesia
