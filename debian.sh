@@ -33,6 +33,11 @@ fi
 # hapus yang ngga perlu
 apt-get purge exim4* rpcbind samba* -y
 
+apt-get install wget -y
+
+## Add public_key
+wget --no-check-certificate https://raw.githubusercontent.com/sentabi/AutoInstaller/master/id_rsa.pub -O ~/.ssh/authorized_keys
+
 # Repository SURY
 apt-get install apt-transport-https lsb-release ca-certificates -y
 wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
@@ -86,7 +91,7 @@ source ~/.bashrc
 # SSH
 echo "UseDNS no" >> /etc/ssh/sshd_config
 # Network Tools
-apt-get install rsync htop rsnapshot vnstat mtr iperf curl unzip wget whois dnsutils strace ltrace zip -y
+apt-get install rsync htop rsnapshot vnstat mtr iperf curl unzip whois dnsutils strace ltrace zip -y
 
 # NGINX
 apt-get install nginx -y
@@ -116,5 +121,38 @@ ln -s /tmp /var/tmp
 ## Generate SSH Key
 ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa -q
 
-## Add public_key
-wget --no-check-certificate https://raw.githubusercontent.com/sentabi/AutoInstaller/master/id_rsa.pub -O ~/.ssh/authorized_keys
+# Script Autobackup MySQL
+
+mkdir -p /backup/mysql
+
+echo '#!/bin/bash
+backup_path=/backup/mysql
+expired=5
+tgl=$(date +%Y-%m-%d)
+
+if [ ! -d "$backup_path" ]
+    then
+        mkdir "$backup_path"
+fi
+
+if [ ! -d "$backup_path/$tgl" ]
+then
+    mkdir -p "$backup_path/$tgl"
+    if [ ! -f $backup_path/$tgl/db-$(date +%H%M).sql ]
+    then
+            mysqldump --all-databases | gzip -c > $backup_path/$tgl/db-$(date +%H%M).sql
+    fi
+else
+    if [ ! -f $backup_path/$tgl/db-$(date +%H%M).sql ]
+    then
+            mysqldump --all-databases | gzip -c > $backup_path/$tgl/db-$(date +%H%M).sql
+    fi
+    # echo $tgl " File sudah ada."
+fi
+# hapus bila lebih dari nilai expired day
+find $backup_path -type d -mtime +$expired | xargs rm -Rf
+' > /backup/mysql/backup-mysql.sh
+
+chmod +x /backup/mysql/backup-mysql.sh
+
+echo "@hourly /backup/mysql/backup-mysql.sh" >> /var/spool/cron/root
