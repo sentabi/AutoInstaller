@@ -130,5 +130,15 @@ mysql -e "DROP DATABASE test;"
 mysql -e "FLUSH PRIVILEGES;"
 mysql -e "UPDATE mysql.user set plugin='' where User='root';"
 
+echo '----------------------'
+echo '| PENTING |'
+echo '----------------------'
+
+echo "Password root MySQL: " $MYSQL_ROOT_PASSWORD
+
+echo "[client]
+user = root
+password = $MYSQL_ROOT_PASSWORD" > ~/.my.cnf
+
 systemctl restart mariadb
 yum update -y
