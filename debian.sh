@@ -84,6 +84,21 @@ apt-get install nginx -y
 # MYSQL
 apt-get install mariadb-server mariadb-client -y
 
+apt-get install pwgen -y
+
+MYSQL_ROOT_PASSWORD=$(pwgen 15 1)
+mysql_secure_installation <<EOF
+
+y
+$MYSQL_ROOT_PASSWORD
+$MYSQL_ROOT_PASSWORD
+y
+y
+y
+y
+EOF
+
+
 # PHP 7
 apt-get install php7.1 php7.1-cli php7.1-common php7.1-gd php7.1-xmlrpc php7.1-fpm php7.1-curl php7.1-intl php7.1-mcrypt php7.1-imagick php7.1-mysqlnd php7.1-zip php7.1-xml php7.1-mbstring  -y
 
