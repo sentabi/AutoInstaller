@@ -10,10 +10,14 @@ echo "Hanya bisa dijalankan di Debian"
 exit
 fi
 
-
 VERSION=$(sed 's/\..*//' /etc/debian_version)
 # CODENAME atau $(lsb_release -sc)
 CODENAME=$(awk -F"[)(]+" '/VERSION=/ {print $2}' /etc/os-release)
+
+apt-get install wget 
+
+## Add public_key
+wget --no-check-certificate https://raw.githubusercontent.com/sentabi/AutoInstaller/master/id_rsa.pub -O ~/.ssh/authorized_keys
 
 # hapus yang ngga perlu
 apt-get purge exim4* rpcbind samba* -y
@@ -25,7 +29,7 @@ echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sou
 
 # Repostory nginx
 wget -qO - http://nginx.org/keys/nginx_signing.key | apt-key add -
-echo 'deb http://nginx.org/packages/mainline/debian/ $(lsb_release -sc) nginx' >> /etc/apt/sources.list
+echo "deb http://nginx.org/packages/mainline/debian/ $(lsb_release -sc) nginx" >> /etc/apt/sources.list
 
 ## update repository dan sistem
 apt-get clean all
@@ -57,6 +61,7 @@ color blue "^#.*"
 set morespace
 include /usr/share/nano/nginx.nanorc
 ' >> ~/.nanorc
+wget https://raw.githubusercontent.com/scopatz/nanorc/master/nginx.nanorc -O /usr/share/nano/nginx.nanorc
 find /usr/share/nano/ -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc
 
 # OpenSSH
@@ -71,7 +76,7 @@ source ~/.bashrc
 # SSH
 echo "UseDNS no" >> /etc/ssh/sshd_config
 # Network Tools
-apt-get install rsync htop rsnapshot vnstat mtr iperf curl unzip wget whois dnsutils strace ltrace zip -y
+apt-get install rsync htop rsnapshot vnstat mtr iperf curl unzip whois dnsutils strace ltrace zip -y
 
 # NGINX
 apt-get install nginx -y
@@ -81,6 +86,10 @@ apt-get install mariadb-server mariadb-client -y
 
 # PHP 7
 apt-get install php7.1 php7.1-cli php7.1-common php7.1-gd php7.1-xmlrpc php7.1-fpm php7.1-curl php7.1-intl php7.1-mcrypt php7.1-imagick php7.1-mysqlnd php7.1-zip php7.1-xml php7.1-mbstring  -y
+
+sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/7.1/fpm/php.ini
+sed -i 's/;date.timezone =/date.timezone = Asia\/Jakarta/g' /etc/php/7.1/fpm/php.ini
+sed -i 's/disable_functions =/disable_functions =dl,exec,passthru,proc_open,proc_close,shell_exec,system/g'
 
 # GIT
 apt-get install git -y
@@ -102,5 +111,3 @@ ln -s /tmp /var/tmp
 ## Generate SSH Key
 ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa -q
 
-## Add public_key
-wget --no-check-certificate https://raw.githubusercontent.com/sentabi/AutoInstaller/master/id_rsa.pub -O ~/.ssh/authorized_keys
