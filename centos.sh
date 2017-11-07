@@ -117,6 +117,18 @@ systemctl start php71-php-fpm
 
 # Setting MariaDB
 systemctl start mariadb
-mysql_secure_installation
+
+MYSQL_ROOT_PASSWORD=$(pwgen 15 1)
+
+# MARIADB disable Unix Socket authentication
+# https://mariadb.com/kb/en/library/authentication-plugin-unix-socket/
+
+mysql -e "UPDATE mysql.user SET Password=PASSWORD('$MYSQL_ROOT_PASSWORD') WHERE User='root';"
+mysql -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"
+mysql -e "DELETE FROM mysql.user WHERE User='';"
+mysql -e "DROP DATABASE test;"
+mysql -e "FLUSH PRIVILEGES;"
+mysql -e "UPDATE mysql.user set plugin='' where User='root';"
+
 systemctl restart mariadb
 yum update -y
