@@ -98,8 +98,6 @@ mysql -e "DROP DATABASE test;"
 mysql -e "FLUSH PRIVILEGES;"
 mysql -e "UPDATE mysql.user set plugin='' where User='root';"
 
-echo "Password root MySQL: " $MYSQL_ROOT_PASSWORD
-
 # PHP 7
 apt-get install php7.1 php7.1-cli php7.1-common php7.1-gd php7.1-xmlrpc php7.1-fpm php7.1-curl php7.1-intl php7.1-mcrypt php7.1-imagick php7.1-mysqlnd php7.1-zip php7.1-xml php7.1-mbstring  -y
 
@@ -127,3 +125,12 @@ ln -s /tmp /var/tmp
 ## Generate SSH Key
 ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa -q
 
+echo '----------------------'
+echo '| PENTING |'
+echo '----------------------'
+
+echo "Password root MySQL: " $MYSQL_ROOT_PASSWORD
+
+echo "[client]
+user = root
+password = $MYSQL_ROOT_PASSWORD" > ~/.my.cnf
