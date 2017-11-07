@@ -88,6 +88,7 @@ apt-get install pwgen -y
 
 MYSQL_ROOT_PASSWORD=$(pwgen 15 1)
 
+systemctl start mysql
 # MARIADB disable Unix Socket authentication
 # https://mariadb.com/kb/en/library/authentication-plugin-unix-socket/
 
