@@ -22,6 +22,10 @@ ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa -q
 
 yum install wget curl nano -y
 
+# public_key
+wget --no-check-certificate https://raw.githubusercontent.com/sentabi/AutoInstaller/master/id_rsa.pub -O ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+
 # nano Syntax highlight
 echo '
 #set autoindent
@@ -33,9 +37,6 @@ include /usr/share/nano/nginx.nanorc
 wget https://raw.githubusercontent.com/scopatz/nanorc/master/nginx.nanorc -O /usr/share/nano/nginx.nanorc
 find /usr/share/nano/ -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc
 
-# public_key
-wget --no-check-certificate https://raw.githubusercontent.com/sentabi/AutoInstaller/master/id_rsa.pub -O ~/.ssh/authorized_keys
-chmod 600 ~/.ssh/authorized_keys
 
 yum clean all
 yum update -y
@@ -142,3 +143,39 @@ password = $MYSQL_ROOT_PASSWORD" > ~/.my.cnf
 
 systemctl restart mariadb
 yum update -y
+
+# Script Autobackup MySQL
+
+mkdir -p /backup/mysql
+
+echo '#!/bin/bash
+backup_path=/backup/mysql
+expired=5
+tgl=$(date +%Y-%m-%d)
+
+if [ ! -d "$backup_path" ]
+    then
+        mkdir "$backup_path"
+fi
+
+if [ ! -d "$backup_path/$tgl" ]
+then
+    mkdir -p "$backup_path/$tgl"
+    if [ ! -f $backup_path/$tgl/db-$(date +%H%M).sql ]
+    then
+            mysqldump --all-databases | gzip -c > $backup_path/$tgl/db-$(date +%H%M).sql
+    fi
+else
+    if [ ! -f $backup_path/$tgl/db-$(date +%H%M).sql ]
+    then
+            mysqldump --all-databases | gzip -c > $backup_path/$tgl/db-$(date +%H%M).sql
+    fi
+    # echo $tgl " File sudah ada."
+fi
+# hapus bila lebih dari nilai expired day
+find $backup_path -type d -mtime +$expired | xargs rm -Rf
+' > /backup/mysql/backup-mysql.sh
+
+chmod +x /backup/mysql/backup-mysql.sh
+
+echo "@hourly /backup/mysql/backup-mysql.sh" >> /var/spool/cron/root
