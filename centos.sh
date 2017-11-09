@@ -13,6 +13,13 @@ fi
 # Set Hostname
 #hostnamectl --static set-hostname hostname.domain
 
+# selinux off ;
+sed -i s/SELINUX=enforcing/SELINUX=disabled/g /etc/selinux/config
+
+# firewall off ;)
+systemctl stop firewalld
+systemctl disable firewalld
+
 # PS1
 echo 'PS1="\[\e[1;30m\][\[\e[1;33m\]\u@\H\[\e[1;30m\]\[\e[0;32m\]\[\e[1;30m\]] \[\e[1;37m\]\w\[\e[0;37m\] \n\$ "' >> ~/.bashrc
 source ~/.bashrc
