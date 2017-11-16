@@ -8,7 +8,7 @@ if [ "$(id -u)" != "0" ]; then
    exit 1
 fi
 
-dnf install wget -y
+dnf install wget sudo -y
 
 # Sinkronisasi Zona waktu WIB
 rm -f /etc/localtime
@@ -41,7 +41,7 @@ dnf upgrade -y
 dnf install aria2 gimp inkscape vnstat terminator git puddletag pavucontrol tigervnc shotwell nano wireshark lshw nmap uget rfkill remmina remmina-plugins* openvpn -y
 
 # nano Syntax highlight
-find /usr/share/nano/ -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc
+sudo -u $USER find /usr/share/nano/ -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc
 
 # Torrent Client
 dnf install deluge -y
@@ -240,15 +240,21 @@ password = $MYSQL_ROOT_PASSWORD" > ~/.my.cnf
 systemctl restart mariadb
 
 ## Login permanen ke phpMyAdmin dari localhost
+# TODO
+# replace baris ini bukan di delete, lalu tambah baru.
+
 sed -i "/'cookie'/d" /etc/phpMyAdmin/config.inc.php
 sed -i "/'user'/d" /etc/phpMyAdmin/config.inc.php
 sed -i "/'password'/d" /etc/phpMyAdmin/config.inc.php
+sed -i "/?>/d" /etc/phpMyAdmin/config.inc.php
 
 echo "
-$cfg['Servers'][$i]['auth_type']     = 'config';    // Authentication method (config, http or cookie based)?
-$cfg['Servers'][$i]['user']          = 'root';          // MySQL user
-$cfg['Servers'][$i]['password']      = '$MYSQL_ROOT_PASSWORD';          // MySQL password (only needed
+\$cfg['Servers'][\$i]['auth_type']     = 'config';    // Authentication method (config, http or cookie based)?
+\$cfg['Servers'][\$i]['user']          = 'root';          // MySQL user
+\$cfg['Servers'][\$i]['password']      = '$MYSQL_ROOT_PASSWORD';          // MySQL password (only needed
 " >> /etc/phpMyAdmin/config.inc.php
+
+chown $USER:$USER -R /var/www
 
 ## Install Composer
 curl -sS https://getcomposer.org/installer | php
