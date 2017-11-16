@@ -26,12 +26,11 @@ wget https://raw.githubusercontent.com/sentabi/scripts/master/bashrc;
 rm -f /home/$USER/.bashrc;
 mv bashrc /home/$USER/.bashrc;
 source /home/$USER/.bashrc;
+rm -f bashrc;
 
 # 3rd party repo
 dnf install http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
 dnf install https://rpms.remirepo.net/fedora/remi-release-$(rpm -E %fedora).rpm -y
-
-
 dnf install kernel-devel kernel-headers gcc make dkms acpid libglvnd-glx libglvnd-opengl libglvnd-devel pkgconfig -y
 
 # Update Repo dan Upgrade
@@ -61,7 +60,7 @@ if [ ! -d "$FOLDERSUBLIME" ]
         tar jxvf sublime_text_3_build_*.tar.bz2
         mv sublime_text_3 /opt
         ln -s /opt/sublime_text_3/sublime_text /usr/bin/sublime
-        rm -fr sublime_text
+        rm -fr sublime_text sublime_text_3_build_3143_x64.tar.bz2
     else
         echo "Folder $FOLDERSUBLIME sudah ada. Instalasi sublime gagal."
 fi
@@ -84,9 +83,10 @@ if [ ! -f "$FILEREPOVIRTUALBOX" ]
     then
         wget http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo -O /etc/yum.repos.d/virtualbox.repo
         wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | rpm --import -
-        dnf install VirtualBox -y
-        usermod -a -G vboxusers $USER
 fi
+dnf install VirtualBox -y
+usermod -a -G vboxusers $USER
+
 # ekstrator
 dnf install file-roller unzip p7zip unrar -y
 
