@@ -263,3 +263,6 @@ chown $USERSUDO:$USERSUDO -R /var/www
 ## Install Composer
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/bin/composer
+
+# Tweak
+sed -i 's/AllowOverride None/AllowOverride All/g'  /etc/httpd/conf/httpd.conf
