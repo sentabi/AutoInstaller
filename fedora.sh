@@ -3,9 +3,13 @@
 ## diinginkan
 hostnamectl set-hostname --static fedora
 
-if [ "$(id -u)" != "0" ]; then
-   echo "This script must be run as root" 1>&2
-   exit 1
+USERSUDO=$USER_SUDO
+if [[ $USERSUDO == '' ]]; then
+    echo "--------------------------------------------"
+    echo "Script ini harus dijalankan menggunakan sudo dan user biasa" 1>&2
+    echo "Contoh : sudo ./fedora.sh" 1>&2
+    echo "--------------------------------------------"
+    exit 1
 fi
 
 dnf install wget -y
@@ -41,7 +45,7 @@ dnf upgrade -y
 dnf install aria2 gimp inkscape vnstat terminator git puddletag pavucontrol tigervnc shotwell nano wireshark lshw nmap uget rfkill remmina remmina-plugins* openvpn -y
 
 # nano Syntax highlight
-find /usr/share/nano/ -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc
+sudo -u $USERSUDO find /usr/share/nano/ -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc
 
 # Torrent Client
 dnf install deluge -y
@@ -86,7 +90,7 @@ if [ ! -f "$FILEREPOVIRTUALBOX" ]
         wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | rpm --import -
 fi
 dnf install VirtualBox -y
-usermod -a -G vboxusers $USER
+usermod -a -G vboxusers $USERSUDO
 
 # ekstrator
 dnf install file-roller unzip p7zip unrar -y
@@ -177,10 +181,10 @@ mv SourceCodePro_FontsOnly-1.013 /usr/share/fonts/
 rm -fr SourceCodePro_FontsOnly* ubuntu-font-family-*
 
 # Tweak XFCE
-xfconf-query -c xfce4-panel -p /plugins/plugin-1/show-button-title -n -t bool -s false
-xfconf-query -c xfce4-panel -p /plugins/plugin-1/button-icon -n -t string -s "ibus-hangul"
-xfconf-query -c xfwm4 -p /general/theme -s "Bluebird"
-xfconf-query -c xsettings -p /Net/ThemeName -s "Glossy"
+sudo -u $USERSUDO xfconf-query -c xfce4-panel -p /plugins/plugin-1/show-button-title -n -t bool -s false
+sudo -u $USERSUDO xfconf-query -c xfce4-panel -p /plugins/plugin-1/button-icon -n -t string -s "ibus-hangul"
+sudo -u $USERSUDO xfconf-query -c xfwm4 -p /general/theme -s "Bluebird"
+sudo -u $USERSUDO xfconf-query -c xsettings -p /Net/ThemeName -s "Glossy"
 
 # Disable Selinux. Enable setelah semua di testing ;)
 sed -i s/SELINUX=enforcing/SELINUX=disabled/g /etc/selinux/config
@@ -254,7 +258,7 @@ echo "
 \$cfg['Servers'][\$i]['password']      = '$MYSQL_ROOT_PASSWORD';          // MySQL password (only needed
 " >> /etc/phpMyAdmin/config.inc.php
 
-chown $USER:$USER -R /var/www
+chown $USERSUDO:$USERSUDO -R /var/www
 
 ## Install Composer
 curl -sS https://getcomposer.org/installer | php
