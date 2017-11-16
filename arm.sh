@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Debian/Ubuntu ARM
+hostnamectl set-hostname --static pi
 
 if [ "$(id -u)" != "0" ]; then
    echo "Harus dijalankan sebagai root" 1>&2
@@ -7,8 +8,8 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 if [[ ! -e /etc/debian_version ]]; then
-echo "Hanya bisa dijalankan di Debian"
-exit
+    echo "Hanya bisa dijalankan di Debian"
+    exit
 fi
 
 # update repository dan sistem
@@ -21,7 +22,6 @@ rm -f /etc/localtime
 cp /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 echo "Asia/Jakarta" > /etc/timezone
 dpkg-reconfigure -f noninteractive tzdata
-
 
 # tambah US UTF8 sama Indonesia
 # Biar format tanggal bisa menggunakan tanggal Indonesia

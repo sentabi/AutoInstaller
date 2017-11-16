@@ -6,8 +6,8 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 if [[ ! -e /etc/centos-release ]]; then
-echo "Hanya bisa dijalankan di CentOS"
-exit
+    echo "Hanya bisa dijalankan di CentOS"
+    exit
 fi
 
 # Set Hostname

@@ -14,7 +14,7 @@ VERSION=$(sed 's/\..*//' /etc/debian_version)
 # CODENAME atau $(lsb_release -sc)
 CODENAME=$(awk -F"[)(]+" '/VERSION=/ {print $2}' /etc/os-release)
 
-apt-get install wget 
+apt-get install wget
 
 ## Add public_key
 wget --no-check-certificate https://raw.githubusercontent.com/sentabi/AutoInstaller/master/id_rsa.pub -O ~/.ssh/authorized_keys

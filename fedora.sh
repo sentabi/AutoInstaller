@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 ## jangan asal di jalankan, liat dulu scriptna untuk menghindari hal-hal yang tidak
 ## diinginkan
+hostnamectl set-hostname --static fedora
 
 if [ "$(id -u)" != "0" ]; then
    echo "This script must be run as root" 1>&2
@@ -218,11 +219,36 @@ chmod 1777 /var/tmp
 
 # Setting MariaDB
 systemctl start mariadb
-mysql_secure_installation
+
+
+MYSQL_ROOT_PASSWORD=$(pwgen 15 1)
+
+# MARIADB disable Unix Socket authentication
+# https://mariadb.com/kb/en/library/authentication-plugin-unix-socket/
+
+mysql -e "UPDATE mysql.user SET Password=PASSWORD('$MYSQL_ROOT_PASSWORD') WHERE User='root';"
+mysql -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"
+mysql -e "DELETE FROM mysql.user WHERE User='';"
+mysql -e "DROP DATABASE test;"
+mysql -e "FLUSH PRIVILEGES;"
+mysql -e "UPDATE mysql.user set plugin='' where User='root';"
+
+echo "[client]
+user = root
+password = $MYSQL_ROOT_PASSWORD" > ~/.my.cnf
+
 systemctl restart mariadb
 
-# setting login permanen phpmyadmin di localhost
-# https://jaranguda.com/login-permanent-phpmyadmin/
+## Login permanen ke phpMyAdmin dari localhost
+sed -i "/'cookie'/d" /etc/phpMyAdmin/config.inc.php
+sed -i "/'user'/d" /etc/phpMyAdmin/config.inc.php
+sed -i "/'password'/d" /etc/phpMyAdmin/config.inc.php
+
+echo "
+$cfg['Servers'][$i]['auth_type']     = 'config';    // Authentication method (config, http or cookie based)?
+$cfg['Servers'][$i]['user']          = 'root';          // MySQL user
+$cfg['Servers'][$i]['password']      = '$MYSQL_ROOT_PASSWORD';          // MySQL password (only needed
+" >> /etc/phpMyAdmin/config.inc.php
 
 ## Install Composer
 curl -sS https://getcomposer.org/installer | php
