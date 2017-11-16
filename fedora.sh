@@ -3,8 +3,8 @@
 ## diinginkan
 hostnamectl set-hostname --static fedora
 
-USERSUDO=$USER_SUDO
-if [[ $USERSUDO == '' ]]; then
+USERSUDO=$SUDO_USER
+if [[ $USERSUDO == 'root' || -z $USERSUDO ]]; then
     echo "--------------------------------------------"
     echo "Script ini harus dijalankan menggunakan sudo dan user biasa" 1>&2
     echo "Contoh : sudo ./fedora.sh" 1>&2
