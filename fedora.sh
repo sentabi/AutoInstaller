@@ -8,7 +8,7 @@ if [ "$(id -u)" != "0" ]; then
    exit 1
 fi
 
-dnf install wget sudo -y
+dnf install wget -y
 
 # Sinkronisasi Zona waktu WIB
 rm -f /etc/localtime
@@ -41,7 +41,7 @@ dnf upgrade -y
 dnf install aria2 gimp inkscape vnstat terminator git puddletag pavucontrol tigervnc shotwell nano wireshark lshw nmap uget rfkill remmina remmina-plugins* openvpn -y
 
 # nano Syntax highlight
-sudo -u $USER find /usr/share/nano/ -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc
+find /usr/share/nano/ -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc
 
 # Torrent Client
 dnf install deluge -y
@@ -69,7 +69,7 @@ fi
 dnf install xfce4-pulseaudio-plugin bluebird-gtk3-theme bluebird-gtk2-theme bluebird-xfwm4-theme -y
 
 # codec multimedia
-dnf install libwbclient-devel gstreamer-plugins-* gstreamer1-* ffmpeg -y
+dnf install ffmpeg gstreamer1-plugins-base gstreamer1-plugins-good gstreamer1-plugins-ugly gstreamer1-plugins-bad-free gstreamer1-plugins-bad-free gstreamer1-plugins-bad-freeworld gstreamer1-plugins-bad-free-extras -y
 
 # Downloader Youtube
 wget https://yt-dl.org/downloads/latest/youtube-dl -O /usr/local/bin/youtube-dl
