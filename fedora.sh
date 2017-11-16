@@ -84,7 +84,7 @@ if [ ! -f "$FILEREPOVIRTUALBOX" ]
     then
         wget http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo -O /etc/yum.repos.d/virtualbox.repo
         wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | rpm --import -
-        dnf install VirtualBox-5.1 -y
+        dnf install VirtualBox -y
         usermod -a -G vboxusers $USER
 fi
 # ekstrator
@@ -176,8 +176,8 @@ mv SourceCodePro_FontsOnly-1.013 /usr/share/fonts/
 rm -fr SourceCodePro_FontsOnly* ubuntu-font-family-*
 
 # Tweak XFCE
-xfconf-query -c xfce4-panel -p /plugins/plugin-1/show-button-title -s "false"
-xfconf-query -c xfce4-panel -p /plugins/plugin-1/button-icon -s "ibus-hangul"
+xfconf-query -c xfce4-panel -p /plugins/plugin-1/show-button-title -n -t bool -s false
+xfconf-query -c xfce4-panel -p /plugins/plugin-1/button-icon -n -t string -s "ibus-hangul"
 xfconf-query -c xfwm4 -p /general/theme -s "Bluebird"
 xfconf-query -c xsettings -p /Net/ThemeName -s "Glossy"
 
