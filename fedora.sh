@@ -28,7 +28,7 @@ dnf remove abrt-* -y
 
 # .bashrc
 sudo -u $USERSUDO rm -f /home/$USER/.bashrc;
-sudo -u $USERSUDO wget https://raw.githubusercontent.com/sentabi/scripts/master/bashrc -O /home/$USER/.bashrc;
+sudo -u $USERSUDO wget https://raw.githubusercontent.com/sentabi/AutoInstaller/master/bashrc -O /home/$USER/.bashrc;
 sudo -u $USERSUDO source /home/$USER/.bashrc;
 
 # 3rd party repo
