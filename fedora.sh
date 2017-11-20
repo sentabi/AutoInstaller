@@ -27,9 +27,9 @@ dnf remove transmission* claws-mail* midori pidgin -y
 dnf remove abrt-* -y
 
 # .bashrc
-sudo -u $USERSUDO rm -f /home/$USER/.bashrc;
-sudo -u $USERSUDO wget https://raw.githubusercontent.com/sentabi/AutoInstaller/master/bashrc -O /home/$USER/.bashrc;
-sudo -u $USERSUDO source /home/$USER/.bashrc;
+sudo -u $USERSUDO bash -c "rm -f /home/$USERSUDO/.bashrc"
+sudo -u $USERSUDO bash -c "wget https://raw.githubusercontent.com/sentabi/AutoInstaller/master/bashrc -O /home/$USERSUDO/.bashrc"
+sudo -u $USERSUDO bash -c "source /home/$USERSUDO/.bashrc"
 
 # 3rd party repo
 dnf install http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
@@ -45,7 +45,7 @@ dnf install aria2  vnstat terminator git  pavucontrol tigervnc nano wireshark ls
 dnf install gimp inkscape puddletag shotwell remmina remmina-plugins* -y
 
 # nano Syntax highlight
-sudo -u $USERSUDO find /usr/share/nano/ -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc
+sudo -u $USERSUDO bash -c "find /usr/share/nano/ -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc"
 
 # Torrent Client
 dnf install deluge -y
@@ -138,7 +138,7 @@ echo '<?xml version="1.0"?>
 ln -s /etc/fonts/conf.avail/10-autohint.conf /etc/fonts/conf.d/
 ln -s /etc/fonts/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d/
 
-sudo -u $USERSUDO echo '<?xml version="1.0"?>
+sudo -u $USERSUDO bash -c "echo '<?xml version="1.0"?>
 <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
 <fontconfig>
  <match target="font" >
@@ -166,9 +166,9 @@ sudo -u $USERSUDO echo '<?xml version="1.0"?>
    <bool>true</bool>
   </edit>
  </match>
-</fontconfig>' > /home/$USER/.fonts.conf
+</fontconfig>'" > /home/$USERSUDO/.fonts.conf
 
-sudo -u $USERSUDO echo "Xft.lcdfilter: lcddefault" > /home/$USER/.Xresources
+sudo -u $USERSUDO bash -c 'echo "Xft.lcdfilter: lcddefault"' > /home/$USERSUDO/.Xresources
 
 ## Generate SSH Key
 # ssh-keygen -b 4096
@@ -188,10 +188,10 @@ mv SourceCodePro_FontsOnly-1.013 /usr/share/fonts/
 rm -fr SourceCodePro_FontsOnly* ubuntu-font-family-*
 
 # Tweak XFCE
-sudo -u $USERSUDO xfconf-query -c xfce4-panel -p /plugins/plugin-1/show-button-title -n -t bool -s false
-sudo -u $USERSUDO xfconf-query -c xfce4-panel -p /plugins/plugin-1/button-icon -n -t string -s "ibus-hangul"
-sudo -u $USERSUDO xfconf-query -c xfwm4 -p /general/theme -s "Bluebird"
-sudo -u $USERSUDO xfconf-query -c xsettings -p /Net/ThemeName -s "Glossy"
+sudo -u $USERSUDO bash -c "xfconf-query -c xfce4-panel -p /plugins/plugin-1/show-button-title -n -t bool -s false"
+sudo -u $USERSUDO bash -c "xfconf-query -c xfce4-panel -p /plugins/plugin-1/button-icon -n -t string -s "ibus-hangul""
+sudo -u $USERSUDO bash -c "xfconf-query -c xfwm4 -p /general/theme -s "Bluebird""
+sudo -u $USERSUDO bash -c "xfconf-query -c xsettings -p /Net/ThemeName -s "Glossy""
 
 # Disable Selinux. Enable setelah semua di testing ;)
 sed -i s/SELINUX=enforcing/SELINUX=disabled/g /etc/selinux/config
@@ -244,9 +244,9 @@ mysql -e "DROP DATABASE test;"
 mysql -e "FLUSH PRIVILEGES;"
 mysql -e "UPDATE mysql.user set plugin='' where User='root';"
 
-echo "[client]
+sudo -u $USERSUDO bash -c "echo "[client]
 user = root
-password = $MYSQL_ROOT_PASSWORD" > ~/.my.cnf
+password = $MYSQL_ROOT_PASSWORD"" > /home/$USERSUDO/.my.cnf
 
 systemctl restart mariadb
 
