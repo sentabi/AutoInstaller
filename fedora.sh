@@ -14,7 +14,7 @@ fi
 
 dnf install wget -y
 
-# Sinkronisasi Zona waktu WIB
+# Sinkronisasi zona waktu WIB
 rm -f /etc/localtime
 cp /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 
@@ -27,11 +27,9 @@ dnf remove transmission* claws-mail* midori pidgin -y
 dnf remove abrt-* -y
 
 # .bashrc
-wget https://raw.githubusercontent.com/sentabi/scripts/master/bashrc;
-rm -f /home/$USER/.bashrc;
-mv bashrc /home/$USER/.bashrc;
-source /home/$USER/.bashrc;
-rm -f bashrc;
+sudo -u $USERSUDO rm -f /home/$USER/.bashrc;
+sudo -u $USERSUDO wget https://raw.githubusercontent.com/sentabi/scripts/master/bashrc -O /home/$USER/.bashrc;
+sudo -u $USERSUDO source /home/$USER/.bashrc;
 
 # 3rd party repo
 dnf install http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
@@ -42,7 +40,9 @@ dnf install kernel-devel kernel-headers gcc make dkms acpid libglvnd-glx libglvn
 dnf upgrade -y
 
 # install aplikasi
-dnf install aria2 gimp inkscape vnstat terminator git puddletag pavucontrol tigervnc shotwell nano wireshark lshw nmap uget rfkill remmina remmina-plugins* openvpn -y
+dnf install aria2  vnstat terminator git  pavucontrol tigervnc nano wireshark lshw nmap uget rfkill openvpn -y
+
+dnf install gimp inkscape puddletag shotwell remmina remmina-plugins* -y
 
 # nano Syntax highlight
 sudo -u $USERSUDO find /usr/share/nano/ -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc
@@ -54,6 +54,8 @@ dnf install deluge -y
 dnf install keepassxc pwgen -y
 
 # ownCloud Client
+# TODO
+# versi Fedora jangan di hardcode
 dnf config-manager --add-repo https://download.opensuse.org/repositories/isv:ownCloud:desktop/Fedora_26/isv:ownCloud:desktop.repo
 dnf install owncloud-client -y
 
@@ -74,6 +76,8 @@ dnf install xfce4-pulseaudio-plugin bluebird-gtk3-theme bluebird-gtk2-theme blue
 
 # codec multimedia
 dnf install ffmpeg gstreamer1-plugins-base gstreamer1-plugins-good gstreamer1-plugins-ugly gstreamer1-plugins-bad-free gstreamer1-plugins-bad-free gstreamer1-plugins-bad-freeworld gstreamer1-plugins-bad-free-extras -y
+
+dnf groupinstall Multimedia -y
 
 # Downloader Youtube
 wget https://yt-dl.org/downloads/latest/youtube-dl -O /usr/local/bin/youtube-dl
@@ -134,7 +138,7 @@ echo '<?xml version="1.0"?>
 ln -s /etc/fonts/conf.avail/10-autohint.conf /etc/fonts/conf.d/
 ln -s /etc/fonts/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d/
 
-echo '<?xml version="1.0"?>
+sudo -u $USERSUDO echo '<?xml version="1.0"?>
 <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
 <fontconfig>
  <match target="font" >
@@ -164,7 +168,7 @@ echo '<?xml version="1.0"?>
  </match>
 </fontconfig>' > /home/$USER/.fonts.conf
 
-echo "Xft.lcdfilter: lcddefault" > /home/$USER/.Xresources
+sudo -u $USERSUDO echo "Xft.lcdfilter: lcddefault" > /home/$USER/.Xresources
 
 ## Generate SSH Key
 # ssh-keygen -b 4096
@@ -172,12 +176,15 @@ echo "Xft.lcdfilter: lcddefault" > /home/$USER/.Xresources
 # Font
 dnf install freetype-freeworld -y
 dnf install https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm -y
+
 wget http://font.ubuntu.com/download/ubuntu-font-family-0.83.zip
 unzip ubuntu-font-family-0.83.zip
 mv ubuntu-font-family-0.83 /usr/share/fonts/
+
 wget https://github.com/downloads/adobe-fonts/source-code-pro/SourceCodePro_FontsOnly-1.013.zip
 unzip SourceCodePro_FontsOnly-1.013.zip
 mv SourceCodePro_FontsOnly-1.013 /usr/share/fonts/
+
 rm -fr SourceCodePro_FontsOnly* ubuntu-font-family-*
 
 # Tweak XFCE
