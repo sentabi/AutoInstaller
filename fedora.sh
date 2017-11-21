@@ -267,7 +267,7 @@ echo "
 
 chown $USERSUDO:$USERSUDO -R /var/www
 
-## Install Composer
+# Install Composer
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/bin/composer
 
@@ -286,3 +286,11 @@ if [ ! -f $WPCLI ]; then
     echo "Install WPCLI selesai!"
     echo "---------------------------"
 fi
+
+
+# Speedtest CLI
+wget https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py -O /usr/bin/speedtest
+chmod +x /usr/bin/speedtest
+
+# Tweak
+sed -i 's/AllowOverride None/AllowOverride All/g'  /etc/httpd/conf/httpd.conf
