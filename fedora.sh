@@ -242,11 +242,11 @@ mysql -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost',
 mysql -e "DELETE FROM mysql.user WHERE User='';"
 mysql -e "DROP DATABASE test;"
 mysql -e "FLUSH PRIVILEGES;"
-mysql -e "UPDATE mysql.user set plugin='' where User='root';"
+mysql -e "UPDATE mysql.user set plugin='' where user='root';"
 
-sudo -u $USERSUDO bash -c "echo "[client]
+echo "[client]
 user = root
-password = $MYSQL_ROOT_PASSWORD"" > /home/$USERSUDO/.my.cnf
+password = $MYSQL_ROOT_PASSWORD" | sudo -u $USERSUDO tee /home/$USERSUDO/.my.cnf > /dev/null
 
 systemctl restart mariadb
 
