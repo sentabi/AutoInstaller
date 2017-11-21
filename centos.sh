@@ -186,3 +186,14 @@ find $backup_path -type d -mtime +$expired | xargs rm -Rf
 chmod +x /backup/mysql/backup-mysql.sh
 
 echo "@hourly /backup/mysql/backup-mysql.sh" >> /var/spool/cron/root
+
+# WP CLI
+WPCLI='/usr/local/bin/wp'
+if [ ! -f $WPCLI ]; then
+    echo "---------------------------"
+    echo "Download & Install WPCLI ... "
+    wget -q https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -O /usr/local/bin/wp
+    chmod +x /usr/local/bin/wp
+    echo "Install WPCLI selesai!"
+    echo "---------------------------"
+fi
