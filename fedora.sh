@@ -187,10 +187,10 @@ mv SourceCodePro_FontsOnly-1.013 /usr/share/fonts/
 rm -fr SourceCodePro_FontsOnly* ubuntu-font-family-*
 
 # Tweak XFCE
-sudo -u $USERSUDO bash -c "xfconf-query -c xfce4-panel -p /plugins/plugin-1/show-button-title -n -t bool -s false"
-sudo -u $USERSUDO bash -c "xfconf-query -c xfce4-panel -p /plugins/plugin-1/button-icon -n -t string -s "ibus-hangul""
-sudo -u $USERSUDO bash -c "xfconf-query -c xfwm4 -p /general/theme -s "Bluebird""
-sudo -u $USERSUDO bash -c "xfconf-query -c xsettings -p /Net/ThemeName -s "Glossy""
+su "$USERSUDO" -m -c "xfconf-query -c xfce4-panel -p /plugins/plugin-1/show-button-title -n -t bool -s false"
+su "$USERSUDO" -m -c "xfconf-query -c xfce4-panel -p /plugins/plugin-1/button-icon -n -t string -s "ibus-hangul""
+su "$USERSUDO" -m -c "xfconf-query -c xfwm4 -p /general/theme -s "Bluebird""
+su "$USERSUDO" -m -c "xfconf-query -c xsettings -p /Net/ThemeName -s "Glossy""
 
 # Disable Selinux. Enable setelah semua di testing ;)
 sed -i s/SELINUX=enforcing/SELINUX=disabled/g /etc/selinux/config
