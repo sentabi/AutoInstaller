@@ -27,9 +27,9 @@ dnf remove transmission* claws-mail* midori pidgin -y
 dnf remove abrt-* -y
 
 # .bashrc
-sudo -u $USERSUDO bash -c "rm -f /home/$USERSUDO/.bashrc"
-sudo -u $USERSUDO bash -c "wget https://raw.githubusercontent.com/sentabi/AutoInstaller/master/bashrc -O /home/$USERSUDO/.bashrc"
-sudo -u $USERSUDO bash -c "source /home/$USERSUDO/.bashrc"
+sudo -u "$USERSUDO" bash -c "rm -f /home/$USERSUDO/.bashrc"
+sudo -u "$USERSUDO" bash -c "wget https://raw.githubusercontent.com/sentabi/AutoInstaller/master/bashrc -O /home/$USERSUDO/.bashrc"
+sudo -u "$USERSUDO" bash -c "source /home/$USERSUDO/.bashrc"
 
 # 3rd party repo
 dnf install http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
@@ -45,7 +45,7 @@ dnf install aria2  vnstat terminator git  pavucontrol tigervnc nano wireshark ls
 dnf install gimp inkscape puddletag shotwell remmina remmina-plugins* -y
 
 # nano Syntax highlight
-sudo -u $USERSUDO bash -c "find /usr/share/nano/ -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc"
+sudo -u "$USERSUDO" bash -c "find /usr/share/nano/ -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc"
 
 # Torrent Client
 dnf install deluge -y
@@ -56,7 +56,7 @@ dnf install keepassxc pwgen -y
 # ownCloud Client
 # TODO
 # versi Fedora jangan di hardcode
-dnf config-manager --add-repo https://download.opensuse.org/repositories/isv:ownCloud:desktop/Fedora_26/isv:ownCloud:desktop.repo
+#dnf config-manager --add-repo https://download.opensuse.org/repositories/isv:ownCloud:desktop/Fedora_26/isv:ownCloud:desktop.repo
 dnf install owncloud-client -y
 
 # install sublime 3
@@ -76,7 +76,6 @@ dnf install xfce4-pulseaudio-plugin bluebird-gtk3-theme bluebird-gtk2-theme blue
 
 # codec multimedia
 dnf install ffmpeg gstreamer1-plugins-base gstreamer1-plugins-good gstreamer1-plugins-ugly gstreamer1-plugins-bad-free gstreamer1-plugins-bad-free gstreamer1-plugins-bad-freeworld gstreamer1-plugins-bad-free-extras -y
-
 dnf groupinstall Multimedia -y
 
 # Downloader Youtube
@@ -94,7 +93,7 @@ if [ ! -f "$FILEREPOVIRTUALBOX" ]
         wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | rpm --import -
 fi
 dnf install VirtualBox -y
-usermod -a -G vboxusers $USERSUDO
+usermod -a -G vboxusers "$USERSUDO"
 
 # ekstrator
 dnf install file-roller unzip p7zip unrar -y
@@ -138,7 +137,7 @@ echo '<?xml version="1.0"?>
 ln -s /etc/fonts/conf.avail/10-autohint.conf /etc/fonts/conf.d/
 ln -s /etc/fonts/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d/
 
-sudo -u $USERSUDO bash -c "echo '<?xml version="1.0"?>
+echo '<?xml version="1.0"?>
 <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
 <fontconfig>
  <match target="font" >
@@ -166,9 +165,9 @@ sudo -u $USERSUDO bash -c "echo '<?xml version="1.0"?>
    <bool>true</bool>
   </edit>
  </match>
-</fontconfig>'" > /home/$USERSUDO/.fonts.conf
+</fontconfig>' > sudo -u "$USERSUDO" tee /home/"$USERSUDO"/.fonts.conf > /dev/null
 
-sudo -u $USERSUDO bash -c 'echo "Xft.lcdfilter: lcddefault"' > /home/$USERSUDO/.Xresources
+sudo -u "$USERSUDO" bash -c 'echo "Xft.lcdfilter: lcddefault"' > /home/"$USERSUDO"/.Xresources
 
 ## Generate SSH Key
 # ssh-keygen -b 4096
@@ -231,7 +230,6 @@ chmod 1777 /var/tmp
 # Setting MariaDB
 systemctl start mariadb
 
-
 MYSQL_ROOT_PASSWORD=$(pwgen 15 1)
 
 # MARIADB disable Unix Socket authentication
@@ -246,7 +244,7 @@ mysql -e "UPDATE mysql.user set plugin='' where user='root';"
 
 echo "[client]
 user = root
-password = $MYSQL_ROOT_PASSWORD" | sudo -u $USERSUDO tee /home/$USERSUDO/.my.cnf > /dev/null
+password = $MYSQL_ROOT_PASSWORD" | sudo -u "$USERSUDO" tee /home/"$USERSUDO"/.my.cnf > /dev/null
 
 systemctl restart mariadb
 
@@ -265,7 +263,7 @@ echo "
 \$cfg['Servers'][\$i]['password']      = '$MYSQL_ROOT_PASSWORD';          // MySQL password (only needed
 " >> /etc/phpMyAdmin/config.inc.php
 
-chown $USERSUDO:$USERSUDO -R /var/www
+chown "$USERSUDO":"$USERSUDO" -R /var/www
 
 # Install Composer
 curl -sS https://getcomposer.org/installer | php
@@ -273,8 +271,6 @@ mv composer.phar /usr/bin/composer
 
 # Tweak
 sed -i 's/AllowOverride None/AllowOverride All/g'  /etc/httpd/conf/httpd.conf
-
-fi
 
 # WP CLI
 WPCLI='/usr/local/bin/wp'
@@ -287,10 +283,6 @@ if [ ! -f $WPCLI ]; then
     echo "---------------------------"
 fi
 
-
 # Speedtest CLI
 wget https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py -O /usr/bin/speedtest
 chmod +x /usr/bin/speedtest
-
-# Tweak
-sed -i 's/AllowOverride None/AllowOverride All/g'  /etc/httpd/conf/httpd.conf
