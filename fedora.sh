@@ -7,7 +7,7 @@ USERSUDO=$SUDO_USER
 if [[ $USERSUDO == 'root' || -z $USERSUDO ]]; then
     echo "--------------------------------------------"
     echo "Script ini harus dijalankan menggunakan sudo dan user biasa" 1>&2
-    echo "Contoh : sudo ./fedora.sh" 1>&2
+    echo "Contoh : sudo -E bash ./fedora.sh" 1>&2
     echo "--------------------------------------------"
     exit 1
 fi
