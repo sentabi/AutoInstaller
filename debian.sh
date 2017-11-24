@@ -74,25 +74,25 @@ apt-get install openssh-server -y
 
 # konfigurasi ulang OpenSSH server'
 dpkg-reconfigure openssh-server
-## PS1
+
+# PS1
 echo 'PS1="\[\e[1;30m\][\[\e[1;33m\]\u@\H\[\e[1;30m\]\[\e[0;32m\]\[\e[1;30m\]] \[\e[1;37m\]\w\[\e[0;37m\] \n\$ "' >> ~/.bashrc
 source ~/.bashrc
 
 # SSH
 echo "UseDNS no" >> /etc/ssh/sshd_config
+
 # Network Tools
 apt-get install rsync htop rsnapshot vnstat mtr iperf curl unzip whois dnsutils strace ltrace zip -y
 
 # NGINX
 apt-get install nginx -y
 
-# MYSQL
-apt-get install mariadb-server mariadb-client -y
-
 apt-get install pwgen -y
 
+# MYSQL
+apt-get install mariadb-server mariadb-client -y
 MYSQL_ROOT_PASSWORD=$(pwgen 15 1)
-
 systemctl start mysql
 # MARIADB disable Unix Socket authentication
 # https://mariadb.com/kb/en/library/authentication-plugin-unix-socket/
@@ -131,18 +131,11 @@ ln -s /tmp /var/tmp
 ## Generate SSH Key
 ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa -q
 
-echo '----------------------'
-echo '| PENTING |'
-echo '----------------------'
-
-echo "Password root MySQL: " $MYSQL_ROOT_PASSWORD
-
 echo "[client]
 user = root
 password = $MYSQL_ROOT_PASSWORD" > ~/.my.cnf
-=======
-# Script Autobackup MySQL
 
+# Script Autobackup MySQL
 mkdir -p /backup/mysql
 
 echo '#!/bin/bash
@@ -172,9 +165,7 @@ fi
 # hapus bila lebih dari nilai expired day
 find $backup_path -type d -mtime +$expired | xargs rm -Rf
 ' > /backup/mysql/backup-mysql.sh
-
 chmod +x /backup/mysql/backup-mysql.sh
-
 echo "@hourly /backup/mysql/backup-mysql.sh" >> /var/spool/cron/root
 
 # WP CLI
@@ -187,3 +178,7 @@ if [ ! -f $WPCLI ]; then
     echo "Install WPCLI selesai!"
     echo "---------------------------"
 fi
+
+echo '----------------------'
+echo "Password root MySQL: " "$MYSQL_ROOT_PASSWORD"
+echo '----------------------'
