@@ -14,7 +14,16 @@ VERSION=$(sed 's/\..*//' /etc/debian_version)
 # CODENAME atau $(lsb_release -sc)
 CODENAME=$(awk -F"[)(]+" '/VERSION=/ {print $2}' /etc/os-release)
 
-apt-get install wget
+apt-get install wget openssh-server -y
+
+# konfigurasi ulang OpenSSH server'
+dpkg-reconfigure openssh-server
+
+# SSH
+echo "UseDNS no" >> /etc/ssh/sshd_config
+
+## Generate SSH Key
+ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa -q
 
 ## Add public_key
 wget --no-check-certificate https://raw.githubusercontent.com/sentabi/AutoInstaller/master/id_rsa.pub -O ~/.ssh/authorized_keys
@@ -69,18 +78,11 @@ include /usr/share/nano/nginx.nanorc
 wget https://raw.githubusercontent.com/scopatz/nanorc/master/nginx.nanorc -O /usr/share/nano/nginx.nanorc
 find /usr/share/nano/ -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc
 
-# OpenSSH
-apt-get install openssh-server -y
-
-# konfigurasi ulang OpenSSH server'
-dpkg-reconfigure openssh-server
-
 # PS1
 echo 'PS1="\[\e[1;30m\][\[\e[1;33m\]\u@\H\[\e[1;30m\]\[\e[0;32m\]\[\e[1;30m\]] \[\e[1;37m\]\w\[\e[0;37m\] \n\$ "' >> ~/.bashrc
 source ~/.bashrc
 
-# SSH
-echo "UseDNS no" >> /etc/ssh/sshd_config
+
 
 # Network Tools
 apt-get install rsync htop rsnapshot vnstat mtr iperf curl unzip whois dnsutils strace ltrace zip -y
@@ -127,9 +129,6 @@ chmod 1777 /tmp
 echo "tmpfs   /tmp    tmpfs   rw,noexec,nosuid        0       0" >> /etc/fstab
 rm -rf /var/tmp
 ln -s /tmp /var/tmp
-
-## Generate SSH Key
-ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa -q
 
 echo "[client]
 user = root
