@@ -64,8 +64,11 @@ id_ID.UTF-8 UTF-8
 ' > /etc/locale.gen
 locale-gen en_US.UTF-8
 
-### install ca-certificates biar wget ga protest ERROR: The certificate of xxxxxx
+# install ca-certificates biar wget ga protest ERROR: The certificate of xxxxxx
 apt-get install bsdutils bash-completion nano dialog curl ca-certificates -y
+
+# karna ifconfig itu penting ;)
+apt-get install net-tools -y
 
 # nano Syntax highlight
 echo '
