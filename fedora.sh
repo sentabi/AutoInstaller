@@ -176,9 +176,9 @@ sudo -u "$USERSUDO" bash -c 'echo "Xft.lcdfilter: lcddefault"' > /home/"$USERSUD
 dnf install freetype-freeworld -y
 dnf install https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm -y
 
-wget http://font.ubuntu.com/download/ubuntu-font-family-0.83.zip
-unzip ubuntu-font-family-0.83.zip
-mv ubuntu-font-family-0.83 /usr/share/fonts/
+wget https://assets.ubuntu.com/v1/fad7939b-ubuntu-font-family-0.83.zip
+unzip fad7939b-ubuntu-font-family-0.83.zip
+mv fad7939b-ubuntu-font-family-0.83 /usr/share/fonts/
 
 wget https://github.com/downloads/adobe-fonts/source-code-pro/SourceCodePro_FontsOnly-1.013.zip
 unzip SourceCodePro_FontsOnly-1.013.zip
