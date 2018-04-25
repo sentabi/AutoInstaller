@@ -100,6 +100,7 @@ dnf install file-roller unzip p7zip unrar -y
 
 # Mount Android/Samba
 dnf install libmtp-devel libmtp gvfs-mtp simple-mtpfs libusb gvfs-client gvfs-smb gvfs-fuse gigolo -y
+dnf install samba samba-common samba-client -y
 
 # Browser dan Email Client
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
