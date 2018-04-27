@@ -117,7 +117,7 @@ dnf install libreoffice -y
 # Telegram
 # Telegram otomatis membuat shortcut, jadi tidak perlu dibuat lagi
 cd /opt;
-wget --content-disposition https://tdesktop.com/linux
+wget --content-disposition  https://telegram.org/dl/desktop/linux
 tar xJvf tsetup.*.tar.xz
 ln -s /opt/Telegram/Telegram /usr/bin/telegram
 rm -fr tsetup.*.tar.xz
