@@ -75,8 +75,16 @@ fi
 dnf install xfce4-pulseaudio-plugin bluebird-gtk3-theme bluebird-gtk2-theme bluebird-xfwm4-theme -y
 
 # codec multimedia
-dnf install ffmpeg gstreamer1-plugins-base gstreamer1-plugins-good gstreamer1-plugins-ugly gstreamer1-plugins-bad-free gstreamer1-plugins-bad-free gstreamer1-plugins-bad-freeworld gstreamer1-plugins-bad-free-extras -y
+dnf install ffmpeg gstreamer1-plugins-base gstreamer1-plugins-good-extras gstreamer1-vaapi \
+gstreamer1-plugins-good gstreamer1-plugins-ugly gstreamer1-plugins-bad-free gstreamer1-plugins-bad-free \
+gstreamer1-plugins-bad-freeworld gstreamer1-plugins-bad-free-extras -y
+
 dnf groupinstall Multimedia -y
+
+# HTML 5 / h264 Firefox
+dnf config-manager --set-enabled fedora-cisco-openh264
+dnf install gstreamer1-plugin-openh264 mozilla-openh264 -y
+dnf install compat-ffmpeg28 -y
 
 # Downloader Youtube
 wget https://yt-dl.org/downloads/latest/youtube-dl -O /usr/local/bin/youtube-dl
