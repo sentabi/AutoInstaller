@@ -14,7 +14,7 @@ VERSION=$(sed 's/\..*//' /etc/debian_version)
 # CODENAME atau $(lsb_release -sc)
 CODENAME=$(awk -F"[)(]+" '/VERSION=/ {print $2}' /etc/os-release)
 
-apt-get install wget openssh-server -y
+apt-get install wget sudo openssh-server curl nano dialog -y
 
 # konfigurasi ulang OpenSSH server'
 dpkg-reconfigure openssh-server
@@ -31,7 +31,6 @@ wget --no-check-certificate https://raw.githubusercontent.com/sentabi/AutoInstal
 # hapus yang ngga perlu
 apt-get purge exim4* rpcbind samba* -y
 
-apt-get install wget -y
 
 ## Add public_key
 wget --no-check-certificate https://raw.githubusercontent.com/sentabi/AutoInstaller/master/id_rsa.pub -O ~/.ssh/authorized_keys
@@ -41,7 +40,7 @@ apt-get install apt-transport-https lsb-release ca-certificates -y
 wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
 echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
 
-# Repostory nginx
+# Repostory mainline nginx
 wget -qO - http://nginx.org/keys/nginx_signing.key | apt-key add -
 echo "deb http://nginx.org/packages/mainline/debian/ $(lsb_release -sc) nginx" >> /etc/apt/sources.list
 
@@ -65,7 +64,7 @@ id_ID.UTF-8 UTF-8
 locale-gen en_US.UTF-8
 
 # install ca-certificates biar wget ga protest ERROR: The certificate of xxxxxx
-apt-get install bsdutils bash-completion nano dialog curl ca-certificates -y
+apt-get install bsdutils bash-completion -y
 
 # karna ifconfig itu penting ;)
 apt-get install net-tools -y
@@ -88,7 +87,7 @@ source ~/.bashrc
 
 
 # Network Tools
-apt-get install rsync htop rsnapshot vnstat mtr iperf curl unzip whois dnsutils strace ltrace zip -y
+apt-get install rsync htop rsnapshot vnstat mtr iperf unzip whois dnsutils strace ltrace zip -y
 
 # NGINX
 apt-get install nginx -y
