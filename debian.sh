@@ -25,9 +25,6 @@ echo "UseDNS no" >> /etc/ssh/sshd_config
 ## Generate SSH Key
 ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa -q
 
-## Add public_key
-wget --no-check-certificate https://raw.githubusercontent.com/sentabi/AutoInstaller/master/id_rsa.pub -O ~/.ssh/authorized_keys
-
 # hapus yang ngga perlu
 apt-get purge exim4* rpcbind samba* -y
 
@@ -163,6 +160,7 @@ else
     fi
     # echo $tgl " File sudah ada."
 fi
+
 # hapus bila lebih dari nilai expired day
 find $backup_path -type d -mtime +$expired | xargs rm -Rf
 ' > /backup/mysql/backup-mysql.sh
