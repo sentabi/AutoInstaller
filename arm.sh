@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 # Debian/Ubuntu ARM
-hostnamectl set-hostname --static pi
+
+if ! [[ -z "$1" ]]; then
+        hostnamectl set-hostname --static $1
+else
+        hostnamectl set-hostname --static pi
+fi
 
 if [ "$(id -u)" != "0" ]; then
    echo "Harus dijalankan sebagai root" 1>&2
