@@ -95,6 +95,8 @@ systemctl start mysql
 # MARIADB disable Unix Socket authentication
 # https://mariadb.com/kb/en/library/authentication-plugin-unix-socket/
 
+set +e
+
 mysql -e "UPDATE mysql.user SET Password=PASSWORD('$MYSQL_ROOT_PASSWORD') WHERE User='root';"
 mysql -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"
 mysql -e "DELETE FROM mysql.user WHERE User='';"
