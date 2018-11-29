@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 if [ "$(id -u)" != "0" ]; then
    echo "Harus dijalankan sebagai root" 1>&2
@@ -6,15 +7,20 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 if [[ ! -e /etc/debian_version ]]; then
-echo "Hanya bisa dijalankan di Debian"
-exit
+    echo "Hanya bisa dijalankan di Debian"
+    exit
 fi
+
+apt-get update;
+apt-get install apt-transport-https lsb-release ca-certificates -y
+apt-get install wget pwgen sudo openssh-server curl unzip nano zip dialog -y
+
+# Network Tools
+apt-get install rsync htop rsnapshot vnstat mtr iperf whois dnsutils strace ltrace -y
 
 VERSION=$(sed 's/\..*//' /etc/debian_version)
 # CODENAME atau $(lsb_release -sc)
 CODENAME=$(awk -F"[)(]+" '/VERSION=/ {print $2}' /etc/os-release)
-
-apt-get install wget sudo openssh-server curl nano dialog -y
 
 # konfigurasi ulang OpenSSH server'
 dpkg-reconfigure openssh-server
@@ -28,12 +34,10 @@ ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa -q
 # hapus yang ngga perlu
 apt-get purge exim4* rpcbind samba* -y
 
-
 ## Add public_key
-wget --no-check-certificate https://raw.githubusercontent.com/sentabi/AutoInstaller/master/id_rsa.pub -O ~/.ssh/authorized_keys
+wget https://raw.githubusercontent.com/sentabi/AutoInstaller/master/id_rsa.pub -O ~/.ssh/authorized_keys
 
 # Repository SURY
-apt-get install apt-transport-https lsb-release ca-certificates -y
 wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
 echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
 
@@ -42,7 +46,6 @@ wget -qO - http://nginx.org/keys/nginx_signing.key | apt-key add -
 echo "deb http://nginx.org/packages/mainline/debian/ $(lsb_release -sc) nginx" >> /etc/apt/sources.list
 
 ## update repository dan sistem
-apt-get clean all
 apt-get update
 apt-get upgrade -y
 
@@ -82,14 +85,8 @@ echo 'PS1="\[\e[1;30m\][\[\e[1;33m\]\u@\H\[\e[1;30m\]\[\e[0;32m\]\[\e[1;30m\]] \
 source ~/.bashrc
 
 
-
-# Network Tools
-apt-get install rsync htop rsnapshot vnstat mtr iperf unzip whois dnsutils strace ltrace zip -y
-
 # NGINX
 apt-get install nginx -y
-
-apt-get install pwgen -y
 
 # MYSQL
 apt-get install mariadb-server mariadb-client -y
@@ -106,10 +103,10 @@ mysql -e "FLUSH PRIVILEGES;"
 mysql -e "UPDATE mysql.user set plugin='' where User='root';"
 
 # PHP 7
-apt-get install php7.1 php7.1-cli php7.1-common php7.1-gd php7.1-xmlrpc php7.1-fpm php7.1-curl php7.1-intl php7.1-mcrypt php7.1-imagick php7.1-mysqlnd php7.1-zip php7.1-xml php7.1-mbstring  -y
+apt-get install php7.2 php7.2-cli php7.2-common php7.2-gd php7.2-xmlrpc php7.2-fpm php7.2-curl php7.2-intl php-imagick php7.2-mysql php7.2-zip php7.2-xml php7.2-mbstring  -y
 
-sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/7.1/fpm/php.ini
-sed -i 's/;date.timezone =/date.timezone = Asia\/Jakarta/g' /etc/php/7.1/fpm/php.ini
+sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/7.2/fpm/php.ini
+sed -i 's/;date.timezone =/date.timezone = Asia\/Jakarta/g' /etc/php/7.2/fpm/php.ini
 sed -i 's/disable_functions =/disable_functions =dl,exec,passthru,proc_open,proc_close,shell_exec,system/g'
 
 # GIT
