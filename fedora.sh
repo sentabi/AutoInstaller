@@ -60,17 +60,12 @@ dnf install keepassxc pwgen -y
 dnf install owncloud-client -y
 
 # install sublime 3
-FOLDERSUBLIME=/opt/sublime_text_3
-if [ ! -d "$FOLDERSUBLIME" ]
-    then
-        wget https://download.sublimetext.com/sublime_text_3_build_3143_x64.tar.bz2
-        tar jxvf sublime_text_3_build_*.tar.bz2
-        mv sublime_text_3 /opt
-        ln -s /opt/sublime_text_3/sublime_text /usr/bin/sublime
-        rm -fr sublime_text sublime_text_3_build_3143_x64.tar.bz2
-    else
-        echo "Folder $FOLDERSUBLIME sudah ada. Instalasi sublime gagal."
-fi
+rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg
+dnf config-manager --add-repo https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo
+
+dnf install sublime-text -y
+
+
 # XFCE
 dnf install xfce4-pulseaudio-plugin bluebird-gtk3-theme bluebird-gtk2-theme bluebird-xfwm4-theme -y
 
@@ -187,7 +182,7 @@ dnf install https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore
 
 wget https://assets.ubuntu.com/v1/fad7939b-ubuntu-font-family-0.83.zip
 unzip fad7939b-ubuntu-font-family-0.83.zip
-mv fad7939b-ubuntu-font-family-0.83 /usr/share/fonts/
+mv ubuntu-font-family-0.83 /usr/share/fonts/
 
 wget https://github.com/downloads/adobe-fonts/source-code-pro/SourceCodePro_FontsOnly-1.013.zip
 unzip SourceCodePro_FontsOnly-1.013.zip
