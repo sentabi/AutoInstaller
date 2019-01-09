@@ -53,11 +53,8 @@ dnf install deluge -y
 # Password Manager
 dnf install keepassxc pwgen -y
 
-# ownCloud Client
-# TODO
-# versi Fedora jangan di hardcode
-#dnf config-manager --add-repo https://download.opensuse.org/repositories/isv:ownCloud:desktop/Fedora_26/isv:ownCloud:desktop.repo
-dnf install owncloud-client -y
+# Nextcloud client
+dnf install nextcloud-client -y
 
 # install sublime 3
 rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg
@@ -95,7 +92,7 @@ if [ ! -f "$FILEREPOVIRTUALBOX" ]
         wget http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo -O /etc/yum.repos.d/virtualbox.repo
         wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | rpm --import -
 fi
-dnf install VirtualBox -y
+dnf install VirtualBox-6.0 -y
 usermod -a -G vboxusers "$USERSUDO"
 
 # ekstrator
