@@ -123,7 +123,7 @@ ln -s /opt/Telegram/Telegram /usr/bin/telegram
 rm -fr tsetup.*.tar.xz
 
 # DLL
-dnf install xclip -y
+dnf install xclip gpg -y
 
 ## Font Rendering
 echo '<?xml version="1.0"?>
