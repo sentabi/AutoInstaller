@@ -48,7 +48,7 @@ dnf install gimp inkscape puddletag shotwell remmina remmina-plugins* -y
 sudo -u "$USERSUDO" bash -c "find /usr/share/nano/ -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc"
 
 # Torrent Client
-dnf install deluge -y
+dnf install qbittorrent -y
 
 # Password Manager
 dnf install keepassxc pwgen -y
@@ -56,12 +56,13 @@ dnf install keepassxc pwgen -y
 # Nextcloud client
 dnf install nextcloud-client -y
 
+# screenshoot tools
+dnf install shutter -y
+
 # install sublime 3
 rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg
 dnf config-manager --add-repo https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo
-
 dnf install sublime-text -y
-
 
 # XFCE
 dnf install xfce4-pulseaudio-plugin bluebird-gtk3-theme bluebird-gtk2-theme bluebird-xfwm4-theme -y
@@ -105,8 +106,8 @@ dnf install samba samba-common samba-client -y
 # Browser dan Email Client
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
 dnf install google-chrome-stable_current_x86_64.rpm -y
-rm -f google-chrome-stable_current_x86_64.rpm
 dnf install thunderbird firefox -y
+rm -f google-chrome-stable_current_x86_64.rpm
 
 # Utility
 yum install rsync htop mtr rsnapshot curl vnstat unzip whois iperf curl strace sysstat ltrace zip traceroute bind-utils -y
@@ -175,8 +176,9 @@ sudo -u "$USERSUDO" bash -c 'echo "Xft.lcdfilter: lcddefault"' > /home/"$USERSUD
 
 # Font
 dnf install freetype-freeworld -y
-dnf install https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm -y
+# dnf install https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm -y
 
+wget https://github.com/RedHatBrand/Overpass/releases/latest
 wget https://assets.ubuntu.com/v1/fad7939b-ubuntu-font-family-0.83.zip
 unzip fad7939b-ubuntu-font-family-0.83.zip
 mv ubuntu-font-family-0.83 /usr/share/fonts/
