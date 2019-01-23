@@ -187,7 +187,7 @@ wget https://github.com/downloads/adobe-fonts/source-code-pro/SourceCodePro_Font
 unzip SourceCodePro_FontsOnly-1.013.zip
 mv SourceCodePro_FontsOnly-1.013 /usr/share/fonts/
 
-rm -fr SourceCodePro_FontsOnly* ubuntu-font-family-*
+rm -fr SourceCodePro_FontsOnly* fad7939b-ubuntu-*
 
 # Tweak XFCE
 su "$USERSUDO" -m -c 'xfconf-query -c xfce4-panel -p /plugins/plugin-1/show-button-title -n -t bool -s false'
