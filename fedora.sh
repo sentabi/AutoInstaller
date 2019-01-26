@@ -40,7 +40,7 @@ dnf install kernel-devel kernel-headers gcc make dkms acpid libglvnd-glx libglvn
 dnf upgrade -y
 
 # install aplikasi
-dnf install aria2  vnstat terminator git  pavucontrol tigervnc nano wireshark lshw nmap uget rfkill openvpn -y
+dnf install aria2  vnstat terminator git pavucontrol tigervnc nano wireshark lshw nmap uget rfkill openvpn mediawriter -y
 
 dnf install gimp inkscape puddletag shotwell remmina remmina-plugins* -y
 
@@ -60,9 +60,17 @@ dnf install nextcloud-client -y
 dnf install shutter -y
 
 # install sublime 3
-rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg
-dnf config-manager --add-repo https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo
-dnf install sublime-text -y
+FOLDERSUBLIME=/opt/sublime_text_3
+if [ ! -d "$FOLDERSUBLIME" ]
+    then
+        wget https://download.sublimetext.com/sublime_text_3_build_3176_x64.tar.bz2
+        tar jxvf sublime_text_3_build_*.tar.bz2
+        mv sublime_text_3 /opt
+        ln -s /opt/sublime_text_3/sublime_text /usr/bin/sublime
+        rm -fr sublime_text sublime_text_3_build_3143_x64.tar.bz2
+    else
+        echo "Folder $FOLDERSUBLIME sudah ada. Instalasi sublime gagal."
+fi
 
 # XFCE
 dnf install xfce4-pulseaudio-plugin bluebird-gtk3-theme bluebird-gtk2-theme bluebird-xfwm4-theme -y
@@ -180,14 +188,14 @@ dnf install freetype-freeworld -y
 
 wget https://github.com/RedHatBrand/Overpass/releases/latest
 wget https://assets.ubuntu.com/v1/fad7939b-ubuntu-font-family-0.83.zip
-unzip fad7939b-ubuntu-font-family-0.83.zip
+unzip ubuntu-font-family-0.83.zip
 mv ubuntu-font-family-0.83 /usr/share/fonts/
 
 wget https://github.com/downloads/adobe-fonts/source-code-pro/SourceCodePro_FontsOnly-1.013.zip
 unzip SourceCodePro_FontsOnly-1.013.zip
 mv SourceCodePro_FontsOnly-1.013 /usr/share/fonts/
 
-rm -fr SourceCodePro_FontsOnly* fad7939b-ubuntu-*
+rm -fr SourceCodePro_FontsOnly* ubuntu-font-family-0.83.zip
 
 # Tweak XFCE
 su "$USERSUDO" -m -c 'xfconf-query -c xfce4-panel -p /plugins/plugin-1/show-button-title -n -t bool -s false'
