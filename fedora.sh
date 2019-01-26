@@ -188,14 +188,14 @@ dnf install freetype-freeworld -y
 
 wget https://github.com/RedHatBrand/Overpass/releases/latest
 wget https://assets.ubuntu.com/v1/fad7939b-ubuntu-font-family-0.83.zip
-unzip ubuntu-font-family-0.83.zip
+unzip fad7939b-ubuntu-font-family-0.83.zip
 mv ubuntu-font-family-0.83 /usr/share/fonts/
 
 wget https://github.com/downloads/adobe-fonts/source-code-pro/SourceCodePro_FontsOnly-1.013.zip
 unzip SourceCodePro_FontsOnly-1.013.zip
 mv SourceCodePro_FontsOnly-1.013 /usr/share/fonts/
 
-rm -fr SourceCodePro_FontsOnly* ubuntu-font-family-0.83.zip
+rm -fr SourceCodePro_FontsOnly* fad7939b-ubuntu-font-family-0.83.zip
 
 # Tweak XFCE
 su "$USERSUDO" -m -c 'xfconf-query -c xfce4-panel -p /plugins/plugin-1/show-button-title -n -t bool -s false'
