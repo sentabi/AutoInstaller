@@ -40,9 +40,8 @@ dnf install kernel-devel kernel-headers gcc make dkms acpid libglvnd-glx libglvn
 dnf upgrade -y
 
 # install aplikasi
-dnf install aria2  vnstat terminator git pavucontrol tigervnc nano wireshark lshw nmap uget rfkill openvpn mediawriter -y
-
-dnf install gimp inkscape puddletag shotwell remmina remmina-plugins* -y
+dnf install aria2  vnstat terminator git pavucontrol tigervnc nano wireshark lshw nmap uget rfkill openvpn mediawriter \
+gimp inkscape puddletag shotwell remmina remmina-plugins* sshfs -y
 
 # nano Syntax highlight
 sudo -u "$USERSUDO" bash -c "find /usr/share/nano/ -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc"
