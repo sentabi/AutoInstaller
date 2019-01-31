@@ -196,6 +196,11 @@ mv SourceCodePro_FontsOnly-1.013 /usr/share/fonts/
 
 rm -fr SourceCodePro_FontsOnly* fad7939b-ubuntu-font-family-0.83.zip
 
+# tweak font
+dnf copr enable dawid/better_fonts
+dnf install fontconfig-enhanced-defaults fontconfig-font-replacements
+
+
 # Tweak XFCE
 su "$USERSUDO" -m -c 'xfconf-query -c xfce4-panel -p /plugins/plugin-1/show-button-title -n -t bool -s false'
 su "$USERSUDO" -m -c 'xfconf-query -c xfce4-panel -p /plugins/plugin-1/button-icon -n -t string -s "ibus-hangul"'
