@@ -197,7 +197,7 @@ mv SourceCodePro_FontsOnly-1.013 /usr/share/fonts/
 rm -fr SourceCodePro_FontsOnly* fad7939b-ubuntu-font-family-0.83.zip
 
 # tweak font
-dnf copr enable dawid/better_fonts
+dnf copr enable dawid/better_fonts -y
 dnf install fontconfig-enhanced-defaults fontconfig-font-replacements
 
 
