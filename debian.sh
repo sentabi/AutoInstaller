@@ -112,6 +112,9 @@ sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/7.3/fpm/php.ini
 sed -i 's/;date.timezone =/date.timezone = Asia\/Jakarta/g' /etc/php/7.3/fpm/php.ini
 sed -i 's/disable_functions =/disable_functions =dl,exec,passthru,proc_open,proc_close,shell_exec,system/g'
 
+sed -i 's/post_max_size \=\ 8M/post_max_size \=\ 80M/g' /etc/php/7.3/fpm/php.ini
+sed -i 's/upload_max_filesize \=\ 2M/upload_max_filesize \=\ 80M/g' /etc/php/7.3/fpm/php.ini
+
 # GIT
 apt-get install git -y
 
