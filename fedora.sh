@@ -40,7 +40,7 @@ dnf install kernel-devel kernel-headers gcc make dkms acpid libglvnd-glx libglvn
 dnf upgrade -y
 
 # install aplikasi
-dnf install aria2  vnstat terminator git pavucontrol tigervnc nano wireshark lshw nmap uget rfkill openvpn mediawriter \
+dnf install aria2 sshpass vnstat terminator git pavucontrol tigervnc nano wireshark lshw nmap uget rfkill openvpn mediawriter \
 gimp inkscape puddletag shotwell remmina remmina-plugins* sshfs -y
 
 # nano Syntax highlight
