@@ -30,9 +30,9 @@ else
     PS1="\[\e[1;30m\][\[\e[1;31m\]\u@\H\[\e[1;30m\]\[\e[0;32m\]\[\e[1;30m\]] \[\e[1;37m\]\w\[\e[0;37m\] \n\$ "
 fi
 
+# SINAMPATI
 alias passna='pwgen -s -B -y -a 20 1'
 alias passna2='pwgen -s -B -n -c -a 20 1'
-alias bersihlaravel='php artisan route:clear;php artisan view:clear;php artisan config:clear;php artisan cache:clear;'
 alias ww='cd /var/www/html'
 alias wget='wget --content-disposition'
 alias gitdiff='git diff --name-only'
@@ -40,4 +40,3 @@ alias wget0='wget -O /dev/null'
 alias xclip='xclip -selection c'
 alias gitcommit='git commit -S -m'
 alias lanengen='cat ~/lanengen.md | xclip'
-alias gitcommit='git commit -S -m'
