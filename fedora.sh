@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
 ## jangan asal di jalankan, liat dulu scriptna untuk menghindari hal-hal yang tidak
 ## diinginkan
+
+# Set hostname
 hostnamectl set-hostname --static fedora
+
+# Generate SSH Key
+ssh-keygen -b 4096
+
 
 USERSUDO=$SUDO_USER
 if [[ $USERSUDO == 'root' || -z $USERSUDO ]]; then
@@ -18,13 +24,9 @@ dnf install wget -y
 rm -f /etc/localtime
 cp /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 
-dnf install chrony -y
-systemctl enable chronyd
-systemctl start chronyd
 
 # Hapus aplikasi yang ngga perlu
-dnf remove transmission* claws-mail* midori pidgin -y
-dnf remove abrt-* -y
+dnf remove transmission* claws-mail* abrt-* midori pidgin -y
 
 # .bashrc
 sudo -u "$USERSUDO" bash -c "rm -f /home/$USERSUDO/.bashrc"
@@ -34,10 +36,13 @@ sudo -u "$USERSUDO" bash -c "source /home/$USERSUDO/.bashrc"
 # 3rd party repo
 dnf install http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
 dnf install https://rpms.remirepo.net/fedora/remi-release-$(rpm -E %fedora).rpm -y
-dnf install kernel-devel kernel-headers gcc make dkms acpid libglvnd-glx libglvnd-opengl libglvnd-devel pkgconfig -y
 
 # Update Repo dan Upgrade
 dnf upgrade -y
+
+# install kernel-devel dkk untuk compile
+dnf install kernel-devel kernel-headers gcc make dkms acpid libglvnd-glx libglvnd-opengl libglvnd-devel pkgconfig -y
+
 
 # install aplikasi
 dnf install aria2 sshpass vnstat terminator git pavucontrol tigervnc nano wireshark lshw nmap uget rfkill openvpn mediawriter \
@@ -60,15 +65,27 @@ dnf install shutter -y
 
 # install sublime 3
 FOLDERSUBLIME=/opt/sublime_text_3
+SUBLIMELATESTVERSION=3207
+
 if [ ! -d "$FOLDERSUBLIME" ]
     then
-        wget https://download.sublimetext.com/sublime_text_3_build_3176_x64.tar.bz2
+        wget https://download.sublimetext.com/sublime_text_3_build_3207_x64.tar.bz2
         tar jxvf sublime_text_3_build_*.tar.bz2
         mv sublime_text_3 /opt
         ln -s /opt/sublime_text_3/sublime_text /usr/bin/sublime
-        rm -fr sublime_text sublime_text_3_build_3143_x64.tar.bz2
+        rm -fr sublime_text sublime_text_3_build_3207_x64.tar.bz2
     else
-        echo "Folder $FOLDERSUBLIME sudah ada. Instalasi sublime gagal."
+    	VERSISUBLIMETERINSTALL=$(sublime --version | cut -d ' ' -f4)
+
+    	if [[ $SUBLIMELATESTVERSION -gt $VERSISUBLIMETERINSTALL ]]; then 
+    		rm -fr $FOLDERSUBLIME
+	        wget https://download.sublimetext.com/sublime_text_3_build_3207_x64.tar.bz2
+	        tar jxvf sublime_text_3_build_*.tar.bz2
+	        mv sublime_text_3 /opt
+	        rm -fr sublime_text sublime_text_3_build_3207_x64.tar.bz2
+	    else 
+        	echo "sublime yang ada di $FOLDERSUBLIME merupakan versi terbaru. Instalasi sublime gagal."
+        fi
 fi
 
 # XFCE
@@ -83,8 +100,7 @@ dnf groupinstall Multimedia -y
 
 # HTML 5 / h264 Firefox
 dnf config-manager --set-enabled fedora-cisco-openh264
-dnf install gstreamer1-plugin-openh264 mozilla-openh264 -y
-dnf install compat-ffmpeg28 -y
+dnf install gstreamer1-plugin-openh264 mozilla-openh264 compat-ffmpeg28 -y
 
 # Downloader Youtube
 wget https://yt-dl.org/downloads/latest/youtube-dl -O /usr/local/bin/youtube-dl
@@ -98,37 +114,32 @@ FILEREPOVIRTUALBOX=/etc/yum.repos.d/virtualbox.repo
 if [ ! -f "$FILEREPOVIRTUALBOX" ]
     then
         wget http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo -O /etc/yum.repos.d/virtualbox.repo
-        wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | rpm --import -
+		rpm --import https://www.virtualbox.org/download/oracle_vbox.asc
 fi
 dnf install VirtualBox-6.0 -y
 usermod -a -G vboxusers "$USERSUDO"
 
+
 # ekstrator
 dnf install file-roller unzip p7zip unrar -y
 
-# Mount Android/Samba
+# Mount Android
 dnf install libmtp-devel libmtp gvfs-mtp simple-mtpfs libusb gvfs-client gvfs-smb gvfs-fuse gigolo -y
+
+# Install SAMBA
 dnf install samba samba-common samba-client -y
 
-# Browser dan Email Client
-wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
-dnf install google-chrome-stable_current_x86_64.rpm -y
-dnf install thunderbird firefox -y
-rm -f google-chrome-stable_current_x86_64.rpm
+# Install Google Chrome
+dnf install https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm -y
+
+# Install Thunderbird 
+dnf install thunderbird -y
 
 # Utility
-yum install rsync htop mtr rsnapshot curl vnstat unzip whois iperf curl strace sysstat ltrace zip traceroute bind-utils -y
+yum install rsync htop mtr rsnapshot curl vnstat unzip whois iperf curl strace sysstat ltrace zip traceroute bind-utils wavemon -y
 
 # LibreOffice
 dnf install libreoffice -y
-
-# Telegram
-# Telegram otomatis membuat shortcut, jadi tidak perlu dibuat lagi
-cd /opt;
-wget --content-disposition  https://telegram.org/dl/desktop/linux
-tar xJvf tsetup.*.tar.xz
-ln -s /opt/Telegram/Telegram /usr/bin/telegram
-rm -fr tsetup.*.tar.xz
 
 # DLL
 dnf install xclip gpg -y
@@ -178,23 +189,25 @@ echo '<?xml version="1.0"?>
 
 sudo -u "$USERSUDO" bash -c 'echo "Xft.lcdfilter: lcddefault"' > /home/"$USERSUDO"/.Xresources
 
-## Generate SSH Key
-# ssh-keygen -b 4096
 
 # Font
-dnf install freetype-freeworld -y
+# dnf install freetype-freeworld -y
 # dnf install https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm -y
 
-wget https://github.com/RedHatBrand/Overpass/releases/latest
-wget https://assets.ubuntu.com/v1/fad7939b-ubuntu-font-family-0.83.zip
-unzip fad7939b-ubuntu-font-family-0.83.zip
-mv ubuntu-font-family-0.83 /usr/share/fonts/
+wget https://assets.ubuntu.com/v1/fad7939b-ubuntu-font-family-0.83.zip -O ubuntu.zip 
+unzip ubuntu.zip 
+mv ubuntu-font-family-* /usr/share/fonts/
 
-wget https://github.com/downloads/adobe-fonts/source-code-pro/SourceCodePro_FontsOnly-1.013.zip
-unzip SourceCodePro_FontsOnly-1.013.zip
+wget https://github.com/RedHatBrand/Overpass/archive/3.0.3.tar.gz -O overpass.tar.gz 
+tar zxvf overpass.tar.gz 
+mv Overpass-* /usr/share/fonts/
+
+wget https://github.com/downloads/adobe-fonts/source-code-pro/SourceCodePro_FontsOnly-1.013.zip -O sourcecodepro.zip
+unzip sourcecodepro.zip
 mv SourceCodePro_FontsOnly-1.013 /usr/share/fonts/
+mv SourceCodePro_FontsOnly-* /usr/share/fonts/
 
-rm -fr SourceCodePro_FontsOnly* fad7939b-ubuntu-font-family-0.83.zip
+rm -f sourcecodepro.zip overpass.tar.gz ubuntu.zip
 
 # tweak font
 dnf copr enable dawid/better_fonts -y
@@ -234,7 +247,7 @@ systemctl restart systemd-journald
 echo "UseDNS no" >> /etc/ssh/sshd_config
 
 ## LAMP untu Web Development
-dnf install httpd mariadb mariadb-server php php-pdo phpMyAdmin php-cli php-mysqlnd php-mcrypt php-xml -y
+dnf install httpd mariadb mariadb-server phpMyAdmin php php-pdo, php-cli php-mysqlnd php-mcrypt php-xml -y
 
 # Buat baru file /var/tmp
 # Biar ga error https://jaranguda.com/solusi-mariadb-failed-at-step-namespace-spawning/
@@ -301,3 +314,10 @@ fi
 # Speedtest CLI
 wget https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py -O /usr/bin/speedtest
 chmod +x /usr/bin/speedtest
+
+# Telegram
+cd /opt;
+wget --content-disposition  https://telegram.org/dl/desktop/linux -O tsetup.tar.xz
+tar xJvf tsetup.tar.xz
+ln -s /opt/Telegram/Telegram /usr/bin/telegram
+rm -f tsetup.tar.xz
