@@ -247,7 +247,7 @@ systemctl restart systemd-journald
 echo "UseDNS no" >> /etc/ssh/sshd_config
 
 ## LAMP untu Web Development
-dnf install httpd mariadb mariadb-server phpMyAdmin php php-pdo, php-cli php-mysqlnd php-mcrypt php-xml -y
+dnf install httpd mariadb mariadb-server phpMyAdmin php php-pdo php-cli php-mysqlnd php-mcrypt php-xml -y
 
 # Buat baru file /var/tmp
 # Biar ga error https://jaranguda.com/solusi-mariadb-failed-at-step-namespace-spawning/
