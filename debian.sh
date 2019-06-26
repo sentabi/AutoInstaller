@@ -73,7 +73,7 @@ apt-get install net-tools -y
 
 # nano Syntax highlight
 wget https://raw.githubusercontent.com/scopatz/nanorc/master/nginx.nanorc -O /usr/share/nano/nginx.nanorc
-cat >~/.nanorc <<EOL
+cat >~/.nanorc <<'EOL'
 #set autoindent
 syntax "comments" ".*"
 color blue "^#.*"
@@ -100,7 +100,7 @@ apt-get update
 # NGINX
 apt-get install nginx -y
 # default server block
-cat >/etc/nginx/conf.d/default.conf <<EOL
+cat >/etc/nginx/conf.d/default.conf <<'EOL'
 server {
     listen       80;
     server_name  localhost;
@@ -191,7 +191,7 @@ password = $MYSQL_ROOT_PASSWORD" > ~/.my.cnf
 # Script Autobackup MySQL
 mkdir -p /backup/mysql
 
-cat >/backup/mysql/backup-mysql.sh <<EOL
+cat >/backup/mysql/backup-mysql.sh <<'EOL'
 #!/bin/bash
 backup_path=/backup/mysql
 expired=5
