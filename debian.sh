@@ -54,7 +54,7 @@ EOL
 # Update Repository dan upgrade system
 apt-get update; apt upgrade -y
 
-apt-get install apt-transport-https lsb-release ca-certificates bsdutils bash-completion -y
+apt-get install apt-transport-https lsb-release ca-certificates bsdutils bash-completion gnupg2 -y
 apt-get install wget pwgen sudo openssh-server curl unzip nano zip dialog -y
 
 # Network Tools
