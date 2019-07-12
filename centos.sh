@@ -12,8 +12,12 @@ if [[ ! -e /etc/centos-release ]]; then
     exit
 fi
 
-# Set Hostname
-#hostnamectl --static set-hostname hostname.domain
+# Set hostname
+if ! [[ -z "$1" ]]; then
+        hostnamectl set-hostname --static $1
+else
+        hostnamectl set-hostname --static centos
+fi
 
 # selinux off ;
 sed -i s/SELINUX=enforcing/SELINUX=disabled/g /etc/selinux/config
@@ -32,16 +36,15 @@ ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa -q
 yum install wget curl nano -y
 
 # nano Syntax highlight
-echo '
+wget https://raw.githubusercontent.com/scopatz/nanorc/master/nginx.nanorc -O /usr/share/nano/nginx.nanorc
+cat >~/.nanorc <<'EOL'
 #set autoindent
 syntax "comments" ".*"
 color blue "^#.*"
 set morespace
-include /usr/share/nano/nginx.nanorc
-' >> ~/.nanorc
-wget https://raw.githubusercontent.com/scopatz/nanorc/master/nginx.nanorc -O /usr/share/nano/nginx.nanorc
-find /usr/share/nano/ -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc
+EOL
 
+find /usr/share/nano/ -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc
 
 yum clean all
 yum update -y
@@ -60,94 +63,105 @@ systemctl start chronyd
 systemctl enable chronyd
 
 # Install Utility
-yum install rsync htop mtr curl unzip whois strace ltrace zip traceroute bind-utils -y
-yum install pwgen -y
-yum install git -y
-yum install fail2ban sendmail -y
+yum install rsync htop mtr curl unzip whois strace ltrace zip traceroute bind-utils \
+    pwgen git fail2ban sendmail -y
 
 # MariaDB
-echo '
+cat >/etc/yum.repos.d/MariaDB.repo <<'EOL'
 [mariadb]
 name = MariaDB
-baseurl = http://yum.mariadb.org/10.1/centos7-amd64
+baseurl = http://yum.mariadb.org/10.3/centos7-amd64
 gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck=1
-' > /etc/yum.repos.d/MariaDB.repo
-yum install mariadb-server mariadb -y
+EOL
 
-# PHP71
-wget http://rpms.remirepo.net/enterprise/remi-release-7.rpm
-yum install remi-release-7.rpm -y
-yum install php71-php php71-php-cli php71-php-common php71-php-json php71-php-intl php71-php-mbstring php71-php-mcrypt php71-php-mysqlnd php71-php-pdo php71-php-tidy php71-php-xml php71-php-fpm -y
+yum install MariaDB-server MariaDB-client -y
+
+# PHP 7.3
+yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm -y
+yum install php73-php php73-php-cli php73-php-common php73-php-json php73-php-intl \
+    php73-php-mbstring php73-php-mcrypt php73-php-mysqlnd php73-php-pdo \
+    php73-php-tidy php73-php-xml php73-php-fpm -y
 
 # Composer
-curl -sS https://getcomposer.org/installer | php71
+curl -sS https://getcomposer.org/installer | php73
 mv composer.phar /usr/bin/composer
-ln -s /usr/bin/php71 /usr/local/bin/php
+ln -s /usr/bin/php73 /usr/local/bin/php
 
 # nginx
-echo '
+cat >/etc/yum.repos.d/nginx.repo <<'EOL'
 [nginx.org]
 name=nginx.org repo
-baseurl=http://nginx.org/packages/centos/7/$basearch/
+baseurl=http://nginx.org/packages/mainline/centos/$releasever/$basearch/
 gpgcheck=1
 enabled=1
-' > /etc/yum.repos.d/nginx.repo;
+EOL
 
 rpm --import http://nginx.org/keys/nginx_signing.key
+
 yum install nginx -y
 
-sed -i 's/user = apache/user = nginx/g' /etc/opt/remi/php71/php-fpm.d/www.conf
-sed -i 's/group = apache/user = nginx/g' /etc/opt/remi/php71/php-fpm.d/www.conf
-sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/opt/remi/php71/php.ini
-sed -i 's/;date.timezone =/date.timezone = Asia\/Jakarta/g' /etc/opt/remi/php71/php.ini
-sed -i "s/\memory_limit = .*/memory_limit = 1024M/" /etc/opt/remi/php71/php.ini
+# folder root nginx
+mkdir -p /var/www/
 
-# nonaktifkan fungsi PHP
-# sed -i 's/disable_functions =/disable_functions =dl,exec,passthru,proc_open,proc_close,shell_exec,system/g'
-# listen = /run/php/php7.0-fpm.sock
-# listen.owner = nginx
-# listen.group = nginx
-# listen.mode = 0660
+# default server nginx
+cat >/etc/nginx/conf.d/default.conf <<'EOL'
+server {
+    listen       80;
+    server_name  centos default_server;
+    root   /var/www/;
+
+    index index.php index.html;
+
+    location / {
+        try_files $uri $uri/ /index.php?$args;
+    }
+
+    location ~ \.php(?:$|/) {
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+        fastcgi_param HTTPS on;
+        fastcgi_param modHeadersAvailable true; #Avoid sending the security headers twice
+        fastcgi_pass unix:/var/opt/remi/php73/run/php-fpm/php73-php-fpm.sock;
+        fastcgi_intercept_errors on;
+    }
+
+}
+EOL
+
+# test nginx php fpm
+# cek di IP-SERVER/info.php
+echo "<?php  phpinfo();" > /var/www/info.php
+
+sed -i 's/user = apache/user = nginx/g' /etc/opt/remi/php73/php-fpm.d/www.conf
+sed -i 's/listen = 127.0.0.1:9000/listen = \/var\/opt\/remi\/php73\/run\/php-fpm\/php73-php-fpm.sock/g' /etc/opt/remi/php73/php-fpm.d/www.conf
+sed -i 's/group = apache/group = nginx/g' /etc/opt/remi/php73/php-fpm.d/www.conf
+sed -i 's/;listen.owner = nobody/listen.owner = nginx/g' /etc/opt/remi/php73/php-fpm.d/www.conf
+sed -i 's/;listen.group = nobody/listen.group = nginx/g' /etc/opt/remi/php73/php-fpm.d/www.conf
+sed -i 's/;listen.mode = 0660/listen.mode = 0660/g' /etc/opt/remi/php73/php-fpm.d/www.conf
+sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/opt/remi/php73/php.ini
+sed -i 's/;date.timezone =/date.timezone = Asia\/Jakarta/g' /etc/opt/remi/php73/php.ini
+sed -i "s/\memory_limit = .*/memory_limit = 1024M/" /etc/opt/remi/php73/php.ini
+sed -i 's/disable_functions =/disable_functions =dl,exec,passthru,proc_open,proc_close,shell_exec,system/g' /etc/opt/remi/php73/php.ini
 
 # SSH
 echo 'UseDNS no' >> /etc/ssh/sshd_config
 
-systemctl enable nginx
-systemctl enable mariadb
-systemctl enable php71-php-fpm
-
-systemctl start nginx
-systemctl start mariadb
-systemctl start php71-php-fpm
-
 # Setting MariaDB
-systemctl start mariadb
-
 MYSQL_ROOT_PASSWORD=$(pwgen 15 1)
 
-# MARIADB disable Unix Socket authentication
-# https://mariadb.com/kb/en/library/authentication-plugin-unix-socket/
-
+# securing MariaDB
 mysql -e "UPDATE mysql.user SET Password=PASSWORD('$MYSQL_ROOT_PASSWORD') WHERE User='root';"
 mysql -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"
 mysql -e "DELETE FROM mysql.user WHERE User='';"
 mysql -e "DROP DATABASE test;"
 mysql -e "FLUSH PRIVILEGES;"
-mysql -e "UPDATE mysql.user set plugin='' where User='root';"
-
-echo '----------------------'
-echo '| PENTING |'
-echo '----------------------'
-
-echo "Password root MySQL: " $MYSQL_ROOT_PASSWORD
 
 echo "[client]
 user = root
 password = $MYSQL_ROOT_PASSWORD" > ~/.my.cnf
-
-# restart mariadb agar perubahan diatas dijalankan
-systemctl restart mariadb
 
 # Script Autobackup MySQL
 mkdir -p /backup/mysql
@@ -196,3 +210,19 @@ if [ ! -f $WPCLI ]; then
     echo "Install WPCLI selesai!"
     echo "---------------------------"
 fi
+
+# Aktifkan nginx mariadb php sewaktu reboot
+systemctl enable nginx
+systemctl enable mariadb
+systemctl enable php73-php-fpm
+
+# jalankan nginx mariadb php
+systemctl start nginx
+systemctl start mariadb
+systemctl start php73-php-fpm
+
+# password root
+echo '----------------------'
+echo "Server install selesai!"
+echo "Password root MySQL: " "$MYSQL_ROOT_PASSWORD"
+echo '----------------------'

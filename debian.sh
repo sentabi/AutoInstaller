@@ -2,14 +2,6 @@
 # contoh : ./debian.sh server-debian
 # install php mysql nginx
 
-# Set hostname
-if ! [[ -z "$1" ]]; then
-        hostnamectl set-hostname --static $1
-else
-        hostnamectl set-hostname --static debian
-fi
-
-
 if [ "$(id -u)" != "0" ]; then
    echo "Harus dijalankan sebagai root" 1>&2
    exit 1
@@ -18,6 +10,13 @@ fi
 if [[ ! -e /etc/debian_version ]]; then
     echo "Hanya bisa dijalankan di Debian"
     exit
+fi
+
+# Set hostname
+if ! [[ -z "$1" ]]; then
+        hostnamectl set-hostname --static $1
+else
+        hostnamectl set-hostname --static debian
 fi
 
 # Generate SSH Key
@@ -108,12 +107,16 @@ apt-get update
 
 # NGINX
 apt-get install nginx -y
+
+# folder root nginx
+mkdir -p /var/www/
+
 # default server block
 cat >/etc/nginx/conf.d/default.conf <<'EOL'
 server {
     listen       80;
-    server_name  localhost;
-    root   /usr/share/nginx/html;
+    server_name  debian default_server;
+    root   /var/www/;
 
     index index.php index.html;
 
@@ -137,14 +140,17 @@ EOL
 
 # test nginx php fpm
 # cek di IP-SERVER/info.php
-echo "<?php  phpinfo();" > /usr/share/nginx/html/info.php
+echo "<?php  phpinfo();" > /var/www/info.php
 
+# aktifkan nginx waktu booting
 systemctl enable nginx
-systemctl restart nginx
+# jalankan nginx
+systemctl start nginx
 
 # PHP 7
 apt-get install php7.3 php7.3-cli php7.3-common php7.3-gd php7.3-xmlrpc php7.3-fpm \
-php7.3-curl php7.3-intl php-imagick php7.3-mysql php7.3-zip php7.3-xml php7.3-mbstring -y
+        php7.3-curl php7.3-intl php-imagick php7.3-mysql php7.3-zip php7.3-xml \
+        php7.3-mbstring -y
 
 sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/7.3/fpm/php.ini
 sed -i 's/;date.timezone =/date.timezone = Asia\/Jakarta/g' /etc/php/7.3/fpm/php.ini
@@ -172,7 +178,6 @@ mysql -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost',
 mysql -e "DELETE FROM mysql.user WHERE User='';"
 mysql -e "DROP DATABASE test;"
 mysql -e "FLUSH PRIVILEGES;"
-mysql -e "UPDATE mysql.user set plugin='' where User='root';"
 
 systemctl restart mariadb
 
@@ -196,9 +201,6 @@ ln -s /tmp /var/tmp
 echo "[client]
 user = root
 password = $MYSQL_ROOT_PASSWORD" > ~/.my.cnf
-
-# restart mariadb agar perubahan diatas dijalankan
-systemctl restart mariadb
 
 # Script Autobackup MySQL
 mkdir -p /backup/mysql
