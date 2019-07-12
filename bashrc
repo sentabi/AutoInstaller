@@ -40,7 +40,6 @@ alias wget0='wget -O /dev/null'
 alias wget='wget --content-disposition'
 alias ww='cd /var/www/html'
 alias xclip='xclip -selection c'
-alias youtube-dl='youtube-dl -f best'
 alias hostkuip='for a in $(ls -d */); do host ${a%%/}; done'
 alias lanengen='cat ~/lanengen.md | xclip'
 
@@ -57,5 +56,6 @@ alias bersihlaravel='php artisan route:clear;php artisan view:clear;php artisan 
 
 # Download git git-prompt.sh
 # wget https://raw.github.com/git/git/master/contrib/completion/git-prompt.sh -O ~/.git-prompt.sh
+
 source ~/.git-prompt.sh
 PS1='\n\[\033[0;32m\]\u@\h \[\033[1;33m\]\w \[\033[0m\]$(__git_ps1 "(%s)")\n> '
