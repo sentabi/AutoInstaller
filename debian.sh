@@ -1,4 +1,14 @@
 #!/usr/bin/env bash
+# contoh : ./debian.sh server-debian
+# install php mysql nginx
+
+# Set hostname
+if ! [[ -z "$1" ]]; then
+        hostnamectl set-hostname --static $1
+else
+        hostnamectl set-hostname --static debian
+fi
+
 
 if [ "$(id -u)" != "0" ]; then
    echo "Harus dijalankan sebagai root" 1>&2
@@ -10,13 +20,12 @@ if [[ ! -e /etc/debian_version ]]; then
     exit
 fi
 
-# Add public_key
-wget https://raw.githubusercontent.com/sentabi/AutoInstaller/master/id_rsa.pub -O ~/.ssh/authorized_keys
+# Generate SSH Key
+ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa -q
+
 # OpenSSH server'
 dpkg-reconfigure openssh-server
 echo "UseDNS no" >> /etc/ssh/sshd_config
-# Generate SSH Key
-ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa -q
 
 DEBIAN_CODENAME=$(lsb_release -sc)
 if [ -z $DEBIAN_CODENAME ]; then
@@ -187,6 +196,9 @@ ln -s /tmp /var/tmp
 echo "[client]
 user = root
 password = $MYSQL_ROOT_PASSWORD" > ~/.my.cnf
+
+# restart mariadb agar perubahan diatas dijalankan
+systemctl restart mariadb
 
 # Script Autobackup MySQL
 mkdir -p /backup/mysql

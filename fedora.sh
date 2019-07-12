@@ -3,7 +3,11 @@
 ## diinginkan
 
 # Set hostname
-hostnamectl set-hostname --static fedora
+if ! [[ -z "$1" ]]; then
+        hostnamectl set-hostname --static $1
+else
+        hostnamectl set-hostname --static fedora
+fi
 
 # Generate SSH Key
 ssh-keygen -b 4096
@@ -13,7 +17,7 @@ USERSUDO=$SUDO_USER
 if [[ $USERSUDO == 'root' || -z $USERSUDO ]]; then
     echo "--------------------------------------------"
     echo "Script ini harus dijalankan menggunakan sudo dan user biasa" 1>&2
-    echo "Contoh : sudo -E bash ./fedora.sh" 1>&2
+    echo "Contoh : sudo -E bash ./fedora.sh fedoraku" 1>&2
     echo "--------------------------------------------"
     exit 1
 fi
@@ -42,7 +46,6 @@ dnf upgrade -y
 
 # install kernel-devel dkk untuk compile
 dnf install kernel-devel kernel-headers gcc make dkms acpid libglvnd-glx libglvnd-opengl libglvnd-devel pkgconfig -y
-
 
 # install aplikasi
 dnf install aria2 sshpass vnstat terminator git pavucontrol tigervnc nano wireshark lshw nmap uget rfkill openvpn mediawriter \
@@ -77,13 +80,13 @@ if [ ! -d "$FOLDERSUBLIME" ]
     else
     	VERSISUBLIMETERINSTALL=$(sublime --version | cut -d ' ' -f4)
 
-    	if [[ $SUBLIMELATESTVERSION -gt $VERSISUBLIMETERINSTALL ]]; then 
+    	if [[ $SUBLIMELATESTVERSION -gt $VERSISUBLIMETERINSTALL ]]; then
     		rm -fr $FOLDERSUBLIME
 	        wget https://download.sublimetext.com/sublime_text_3_build_3207_x64.tar.bz2
 	        tar jxvf sublime_text_3_build_*.tar.bz2
 	        mv sublime_text_3 /opt
 	        rm -fr sublime_text sublime_text_3_build_3207_x64.tar.bz2
-	    else 
+	    else
         	echo "sublime yang ada di $FOLDERSUBLIME merupakan versi terbaru. Instalasi sublime gagal."
         fi
 fi
@@ -132,7 +135,7 @@ dnf install samba samba-common samba-client -y
 # Install Google Chrome
 dnf install https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm -y
 
-# Install Thunderbird 
+# Install Thunderbird
 dnf install thunderbird -y
 
 # Utility
@@ -194,12 +197,12 @@ sudo -u "$USERSUDO" bash -c 'echo "Xft.lcdfilter: lcddefault"' > /home/"$USERSUD
 # dnf install freetype-freeworld -y
 # dnf install https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm -y
 
-wget https://assets.ubuntu.com/v1/fad7939b-ubuntu-font-family-0.83.zip -O ubuntu.zip 
-unzip ubuntu.zip 
+wget https://assets.ubuntu.com/v1/fad7939b-ubuntu-font-family-0.83.zip -O ubuntu.zip
+unzip ubuntu.zip
 mv ubuntu-font-family-* /usr/share/fonts/
 
-wget https://github.com/RedHatBrand/Overpass/archive/3.0.3.tar.gz -O overpass.tar.gz 
-tar zxvf overpass.tar.gz 
+wget https://github.com/RedHatBrand/Overpass/archive/3.0.3.tar.gz -O overpass.tar.gz
+tar zxvf overpass.tar.gz
 mv Overpass-* /usr/share/fonts/
 
 wget https://github.com/downloads/adobe-fonts/source-code-pro/SourceCodePro_FontsOnly-1.013.zip -O sourcecodepro.zip
@@ -321,3 +324,6 @@ wget --content-disposition  https://telegram.org/dl/desktop/linux -O tsetup.tar.
 tar xJvf tsetup.tar.xz
 ln -s /opt/Telegram/Telegram /usr/bin/telegram
 rm -f tsetup.tar.xz
+
+echo "Install selesai!"
+exit 1

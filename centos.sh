@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# contoh : ./centos.sh server-centos
+# install php mysql nginx
 
 if [ "$(id -u)" != "0" ]; then
    echo "Harus dijalankan sebagai root" 1>&2
@@ -28,10 +30,6 @@ source ~/.bashrc
 ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa -q
 
 yum install wget curl nano -y
-
-# public_key
-wget --no-check-certificate https://raw.githubusercontent.com/sentabi/AutoInstaller/master/id_rsa.pub -O ~/.ssh/authorized_keys
-chmod 600 ~/.ssh/authorized_keys
 
 # nano Syntax highlight
 echo '
@@ -148,14 +146,14 @@ echo "[client]
 user = root
 password = $MYSQL_ROOT_PASSWORD" > ~/.my.cnf
 
+# restart mariadb agar perubahan diatas dijalankan
 systemctl restart mariadb
-yum update -y
 
 # Script Autobackup MySQL
-
 mkdir -p /backup/mysql
 
-echo '#!/bin/bash
+cat >/backup/mysql/backup-mysql.sh <<'EOL'
+#!/bin/bash
 backup_path=/backup/mysql
 expired=5
 tgl=$(date +%Y-%m-%d)
@@ -179,13 +177,14 @@ else
     fi
     # echo $tgl " File sudah ada."
 fi
+
 # hapus bila lebih dari nilai expired day
 find $backup_path -type d -mtime +$expired | xargs rm -Rf
-' > /backup/mysql/backup-mysql.sh
+EOL
 
 chmod +x /backup/mysql/backup-mysql.sh
-
 echo "@hourly /backup/mysql/backup-mysql.sh" >> /var/spool/cron/root
+
 
 # WP CLI
 WPCLI='/usr/local/bin/wp'
