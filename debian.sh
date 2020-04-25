@@ -13,10 +13,10 @@ if [[ ! -e /etc/debian_version ]]; then
 fi
 
 # Set hostname
-if ! [[ -z "$1" ]]; then
-        hostnamectl set-hostname --static $1
+if [[ -n "$1" ]]; then
+        hostnamectl set-hostname --static "$1"
 else
-        hostnamectl set-hostname --static debian
+        hostnamectl set-hostname --static "debian-$RANDOM"
 fi
 
 # Generate SSH Key
@@ -27,20 +27,20 @@ dpkg-reconfigure openssh-server
 echo "UseDNS no" >> /etc/ssh/sshd_config
 
 DEBIAN_CODENAME=$(lsb_release -sc)
-if [ -z $DEBIAN_CODENAME ]; then
+if [ -z "$DEBIAN_CODENAME" ]; then
     DEBIAN_CODENAME=$(awk -F"[)(]+" '/VERSION=/ {print $2}' /etc/os-release)
 fi
 
-if [ -z $DEBIAN_CODENAME ]; then
+if [ -z "$DEBIAN_CODENAME" ]; then
     DEBIAN_CODENAME=$(dpkg --status tzdata|grep Provides|cut -f2 -d'-')
 fi
 
-if [ -z $DEBIAN_CODENAME ]; then
+if [ -z "$DEBIAN_CODENAME" ]; then
     echo "Codename Debian tidak ditemukan."
     exit 1
 fi
 
-# default repository Debian
+# ganti ke default repository Debian
 cat >/etc/apt/sources.list <<EOL
 deb http://deb.debian.org/debian/ $DEBIAN_CODENAME main
 deb-src http://deb.debian.org/debian/ $DEBIAN_CODENAME main
@@ -50,6 +50,14 @@ deb http://deb.debian.org/debian/ $DEBIAN_CODENAME-updates main
 deb-src http://deb.debian.org/debian/ $DEBIAN_CODENAME-updates main
 EOL
 
+# Repository PHP SURY
+wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
+
+# Repostory mainline nginx
+wget -qO - http://nginx.org/keys/nginx_signing.key | apt-key add -
+echo "deb http://nginx.org/packages/mainline/debian/ $(lsb_release -sc) nginx" >> /etc/apt/sources.list
+
 # Update Repository dan upgrade system
 apt-get update; apt upgrade -y
 
@@ -57,7 +65,7 @@ apt-get install apt-transport-https lsb-release ca-certificates bsdutils bash-co
 apt-get install wget pwgen sudo openssh-server curl unzip nano zip dialog -y
 
 # Network Tools
-apt-get install rsync htop rsnapshot vnstat mtr iperf whois dnsutils strace ltrace -y
+apt-get install rsync htop rsnapshot vnstat mtr iperf whois dnsutils strace ltrace net-tools -y
 
 # Hapus aplikasi yang tidak dibutuhkan
 apt-get purge exim4* rpcbind samba* -y
@@ -76,11 +84,10 @@ id_ID.UTF-8 UTF-8
 ' > /etc/locale.gen
 locale-gen en_US.UTF-8
 
-# karna ifconfig itu penting ;)
-apt-get install net-tools -y
+# nano nginx syntax highlight
+wget https://raw.githubusercontent.com/sentabi/AutoInstaller/master/nginx.nanorc -O /usr/share/nano/nginx.nanorc
 
-# nano Syntax highlight
-wget https://raw.githubusercontent.com/scopatz/nanorc/master/nginx.nanorc -O /usr/share/nano/nginx.nanorc
+# config nano
 cat >~/.nanorc <<'EOL'
 #set autoindent
 syntax "comments" ".*"
@@ -88,28 +95,17 @@ color blue "^#.*"
 set morespace
 EOL
 
+# load semua syntax highlight nano
 find /usr/share/nano/ -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc
 
 # PS1
 echo 'PS1="\[\e[1;30m\][\[\e[1;33m\]\u@\H\[\e[1;30m\]\[\e[0;32m\]\[\e[1;30m\]] \[\e[1;37m\]\w\[\e[0;37m\] \n\$ "' >> ~/.bashrc
-source ~/.bashrc
-
-# Repository SURY
-wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
-echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
-
-# Repostory mainline nginx
-wget -qO - http://nginx.org/keys/nginx_signing.key | apt-key add -
-echo "deb http://nginx.org/packages/mainline/debian/ $(lsb_release -sc) nginx" >> /etc/apt/sources.list
-
-# Update list of available packages
-apt-get update
 
 # NGINX
 apt-get install nginx -y
 
 # folder root nginx
-mkdir -p /var/www/
+mkdir -p "/var/www/"
 
 # default server block
 cat >/etc/nginx/conf.d/default.conf <<'EOL'
@@ -125,13 +121,14 @@ server {
     }
 
     location ~ \.php(?:$|/) {
+        try_files $uri =404;
         fastcgi_split_path_info ^(.+\.php)(/.+)$;
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         fastcgi_param PATH_INFO $fastcgi_path_info;
         fastcgi_param HTTPS on;
         fastcgi_param modHeadersAvailable true; #Avoid sending the security headers twice
-        fastcgi_pass unix:/run/php/php7.3-fpm.sock;
+        fastcgi_pass unix:/run/php/php7.4-fpm.sock;
         fastcgi_intercept_errors on;
     }
 
@@ -148,48 +145,52 @@ systemctl enable nginx
 systemctl start nginx
 
 # PHP 7
-apt-get install php7.3 php7.3-cli php7.3-common php7.3-gd php7.3-xmlrpc php7.3-fpm \
-        php7.3-curl php7.3-intl php-imagick php7.3-mysql php7.3-zip php7.3-xml \
-        php7.3-mbstring -y
+apt-get install php7.4 php7.4-cli php7.4-common php7.4-gd php7.4-xmlrpc php7.4-fpm \
+        php7.4-curl php7.4-intl php-imagick php7.4-mysql php7.4-zip php7.4-xml \
+        php7.4-mbstring -y
 
-sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/7.3/fpm/php.ini
-sed -i 's/;date.timezone =/date.timezone = Asia\/Jakarta/g' /etc/php/7.3/fpm/php.ini
-sed -i 's/disable_functions =/disable_functions =dl,exec,passthru,proc_open,proc_close,shell_exec,system/g' /etc/php/7.3/fpm/php.ini
-sed -i 's/post_max_size \=\ 8M/post_max_size \=\ 80M/g' /etc/php/7.3/fpm/php.ini
-sed -i 's/upload_max_filesize \=\ 2M/upload_max_filesize \=\ 80M/g' /etc/php/7.3/fpm/php.ini
+sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/7.4/fpm/php.ini
+sed -i 's/;date.timezone =/date.timezone = Asia\/Jakarta/g' /etc/php/7.4/fpm/php.ini
+sed -i 's/disable_functions =/disable_functions =dl,exec,passthru,proc_open,proc_close,shell_exec,system/g' /etc/php/7.4/fpm/php.ini
+sed -i 's/post_max_size \=\ 8M/post_max_size \=\ 100M/g' /etc/php/7.4/fpm/php.ini
+sed -i 's/upload_max_filesize \=\ 2M/upload_max_filesize \=\ 100M/g' /etc/php/7.4/fpm/php.ini
 
-# set PHP FPM sebagai nginx
-sed -i "s/www-data/nginx/g" /etc/php/7.3/fpm/pool.d/www.conf
+# jalankan PHP FPM sebagai user nginx
+sed -i "s/www-data/nginx/g" /etc/php/7.4/fpm/pool.d/www.conf
 
 # aktifkan php fpm
-systemctl enable php7.3-fpm
-systemctl restart php7.3-fpm
+systemctl enable php7.4-fpm
+systemctl restart php7.4-fpm
 
 # MySQL/MariaDB
 apt-get install mariadb-server mariadb-client -y
+
 MYSQL_ROOT_PASSWORD=$(pwgen 15 1)
 systemctl enable mariadb
 systemctl start mariadb
+
 # MARIADB disable Unix Socket authentication
 # https://mariadb.com/kb/en/library/authentication-plugin-unix-socket/
-
 mysql -e "UPDATE mysql.user SET Password=PASSWORD('$MYSQL_ROOT_PASSWORD') WHERE User='root';"
 mysql -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"
 mysql -e "DELETE FROM mysql.user WHERE User='';"
 mysql -e "DROP DATABASE test;"
 mysql -e "FLUSH PRIVILEGES;"
 
+# restart mariadb
 systemctl restart mariadb
 
-# GIT
+# Install Git
 apt-get install git -y
 
-# Composer
+# Install Composer
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/bin/composer
 
+# pindah ke root directory
+cd "$HOME" || exit
+
 # Mengamankan /tmp
-cd ~
 rm -rf /tmp
 mkdir /tmp
 mount -t tmpfs -o rw,noexec,nosuid tmpfs /tmp
@@ -198,6 +199,7 @@ echo "tmpfs   /tmp    tmpfs   rw,noexec,nosuid        0       0" >> /etc/fstab
 rm -rf /var/tmp
 ln -s /tmp /var/tmp
 
+# simpan variable mysql agar mysql autologin
 echo "[client]
 user = root
 password = $MYSQL_ROOT_PASSWORD" > ~/.my.cnf
@@ -208,6 +210,7 @@ mkdir -p /backup/mysql
 cat >/backup/mysql/backup-mysql.sh <<'EOL'
 #!/bin/bash
 backup_path=/backup/mysql
+# hapus backup yang lebih dari 5 hari
 expired=5
 tgl=$(date +%Y-%m-%d)
 
@@ -236,7 +239,8 @@ find $backup_path -type d -mtime +$expired | xargs rm -Rf
 EOL
 
 chmod +x /backup/mysql/backup-mysql.sh
-echo "@hourly /backup/mysql/backup-mysql.sh" >> /var/spool/cron/root
+# jalankan backup tiap hari
+echo "@daily /backup/mysql/backup-mysql.sh" >> /var/spool/cron/root
 
 # WP CLI
 WPCLI='/usr/local/bin/wp'
@@ -250,6 +254,6 @@ if [ ! -f $WPCLI ]; then
 fi
 
 echo '----------------------'
-echo "Server install selesai!"
+echo "Instalasi server selesai!"
 echo "Password root MySQL: " "$MYSQL_ROOT_PASSWORD"
 echo '----------------------'
