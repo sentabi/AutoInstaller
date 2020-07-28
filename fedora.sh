@@ -9,9 +9,8 @@ else
         hostnamectl set-hostname --static fedora
 fi
 
-# Generate SSH Key
-ssh-keygen -b 4096
-
+# Generate SSH Key tanpa password
+ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa -q
 
 USERSUDO=$SUDO_USER
 if [[ $USERSUDO == 'root' || -z $USERSUDO ]]; then
@@ -22,23 +21,16 @@ if [[ $USERSUDO == 'root' || -z $USERSUDO ]]; then
     exit 1
 fi
 
-dnf install wget -y
-
-# Sinkronisasi zona waktu WIB
+# Set Zona Waktu WIB
 rm -f /etc/localtime
 cp /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
-
 
 # Hapus aplikasi yang ngga perlu
 dnf remove transmission* claws-mail* abrt-* midori pidgin -y
 
-# .bashrc
-sudo -u "$USERSUDO" bash -c "rm -f /home/$USERSUDO/.bashrc"
-sudo -u "$USERSUDO" bash -c "wget https://raw.githubusercontent.com/sentabi/AutoInstaller/master/bashrc -O /home/$USERSUDO/.bashrc"
-sudo -u "$USERSUDO" bash -c "source /home/$USERSUDO/.bashrc"
-
 # 3rd party repo
-dnf install http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
+dnf install http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm -y
+dnf install http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
 dnf install https://rpms.remirepo.net/fedora/remi-release-$(rpm -E %fedora).rpm -y
 
 # Update Repo dan Upgrade
@@ -48,14 +40,45 @@ dnf upgrade -y
 dnf install kernel-devel kernel-headers gcc make dkms acpid libglvnd-glx libglvnd-opengl libglvnd-devel pkgconfig -y
 
 # install aplikasi
-dnf install aria2 sshpass vnstat terminator git pavucontrol tigervnc nano wireshark lshw nmap uget rfkill openvpn mediawriter \
-gimp inkscape puddletag shotwell remmina remmina-plugins* sshfs -y
+dnf install sshpass pavucontrol nano wget curl lshw rfkill mediawriter puddletag sshfs -y
+
+# GIT
+dnf install git -y
+
+# OpenVPN
+dnf install openvpn -y
+
+# VNC tools
+dnf install tigervnc remmina remmina-plugins* -y
+
+# Design
+dnf install shotwell gimp inkscape -y
+
+# Debugging tools
+dnf install wireshark nmap strace sysstat ltrace -y
+
+# Utility
+dnf install rsnapshot wavemon -y
+
+# CLI TOOLS
+dnf install mtr rsync htop curl whois iperf iperf3 traceroute bind-utils -y
+
+# git prompt
+wget https://raw.github.com/git/git/master/contrib/completion/git-prompt.sh -O ~/.git-prompt.sh
+
+# .bashrc
+sudo -u "$USERSUDO" bash -c "rm -f /home/$USERSUDO/.bashrc"
+sudo -u "$USERSUDO" bash -c "wget https://raw.githubusercontent.com/sentabi/AutoInstaller/master/bashrc -O /home/$USERSUDO/.bashrc"
+
 
 # nano Syntax highlight
 sudo -u "$USERSUDO" bash -c "find /usr/share/nano/ -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc"
 
 # Torrent Client
 dnf install qbittorrent -y
+
+# Download manager
+dnf install uget aria2 -y
 
 # Password Manager
 dnf install keepassxc pwgen -y
@@ -66,40 +89,13 @@ dnf install nextcloud-client -y
 # screenshoot tools
 dnf install shutter -y
 
-# install sublime 3
-FOLDERSUBLIME=/opt/sublime_text_3
-SUBLIMELATESTVERSION=3207
-
-if [ ! -d "$FOLDERSUBLIME" ]
-    then
-        wget https://download.sublimetext.com/sublime_text_3_build_3207_x64.tar.bz2
-        tar jxvf sublime_text_3_build_*.tar.bz2
-        mv sublime_text_3 /opt
-        ln -s /opt/sublime_text_3/sublime_text /usr/bin/sublime
-        rm -fr sublime_text sublime_text_3_build_3207_x64.tar.bz2
-    else
-    	VERSISUBLIMETERINSTALL=$(sublime --version | cut -d ' ' -f4)
-
-    	if [[ $SUBLIMELATESTVERSION -gt $VERSISUBLIMETERINSTALL ]]; then
-    		rm -fr $FOLDERSUBLIME
-	        wget https://download.sublimetext.com/sublime_text_3_build_3207_x64.tar.bz2
-	        tar jxvf sublime_text_3_build_*.tar.bz2
-	        mv sublime_text_3 /opt
-	        rm -fr sublime_text sublime_text_3_build_3207_x64.tar.bz2
-	    else
-        	echo "sublime yang ada di $FOLDERSUBLIME merupakan versi terbaru. Instalasi sublime gagal."
-        fi
-fi
-
 # XFCE
 dnf install xfce4-pulseaudio-plugin bluebird-gtk3-theme bluebird-gtk2-theme bluebird-xfwm4-theme -y
 
 # codec multimedia
 dnf install ffmpeg gstreamer1-plugins-base gstreamer1-plugins-good-extras gstreamer1-vaapi \
-gstreamer1-plugins-good gstreamer1-plugins-ugly gstreamer1-plugins-bad-free gstreamer1-plugins-bad-free \
-gstreamer1-plugins-bad-freeworld gstreamer1-plugins-bad-free-extras -y
-
-dnf groupinstall Multimedia -y
+            gstreamer1-plugins-good gstreamer1-plugins-ugly gstreamer1-plugins-bad-free gstreamer1-plugins-bad-free \
+            gstreamer1-plugins-bad-freeworld gstreamer1-plugins-bad-free-extras -y
 
 # HTML 5 / h264 Firefox
 dnf config-manager --set-enabled fedora-cisco-openh264
@@ -112,19 +108,42 @@ chmod a+rx /usr/local/bin/youtube-dl
 # Multimedia Player
 dnf install vlc smplayer mplayer mpv clementine -y
 
-# VirtualBox
+# install VirtualBox
 FILEREPOVIRTUALBOX=/etc/yum.repos.d/virtualbox.repo
+VIRTUALBOX_LATEST_VERSION=$(wget -qO- https://download.virtualbox.org/virtualbox/LATEST-STABLE.TXT | grep -oE '^[0-9]{1}.[0-9]{1}')
 if [ ! -f "$FILEREPOVIRTUALBOX" ]
     then
         wget http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo -O /etc/yum.repos.d/virtualbox.repo
-		rpm --import https://www.virtualbox.org/download/oracle_vbox.asc
+        rpm --import https://www.virtualbox.org/download/oracle_vbox.asc
 fi
-dnf install VirtualBox-6.0 -y
+dnf install VirtualBox-${VIRTUALBOX_LATEST_VERSION} -y
 usermod -a -G vboxusers "$USERSUDO"
+
+# install Sublime Text 3
+FOLDERSUBLIME=/opt/sublime_text_3
+SUBLIME_LATEST_VERSION=$(curl -s https://www.sublimetext.com/updates/3/stable/updatecheck | grep latest_version | cut -d ':' -f2 | sed 's/[^0-9]*//g')
+
+if [ ! -d "$FOLDERSUBLIME" ]
+    then
+        wget "https://download.sublimetext.com/sublime_text_3_build_${SUBLIME_LATEST_VERSION}_x64.tar.bz2"
+        tar jxvf sublime_text_3_build_${SUBLIME_LATEST_VERSION}_x64.tar.bz2 -C /opt
+        ln -s /opt/sublime_text_3/sublime_text /usr/bin/sublime
+        rm -f "sublime_text_3_build_${SUBLIME_LATEST_VERSION}_x64.tar.bz2"
+    else
+        SUBLIME_INSTALLED_VERSION=$(sublime --version | cut -d ' ' -f4)
+        if [[ $SUBLIME_LATEST_VERSION -gt $SUBLIME_INSTALLED_VERSION ]]; then
+            rm -fr $FOLDERSUBLIME
+            wget "https://download.sublimetext.com/sublime_text_3_build_${SUBLIME_LATEST_VERSION}_x64.tar.bz2"
+            tar jxvf sublime_text_3_build_${SUBLIME_LATEST_VERSION}_x64.tar.bz2 -C /opt
+            rm -f "sublime_text_3_build_${SUBLIME_LATEST_VERSION}_x64.tar.bz2"
+        else
+            echo "Saat ini anda sudah menggunakan Sublime Text versi terbaru (${SUBLIME_LATEST_VERSION})"
+        fi
+fi
 
 
 # ekstrator
-dnf install file-roller unzip p7zip unrar -y
+dnf install file-roller zip unzip p7zip unrar -y
 
 # Mount Android
 dnf install libmtp-devel libmtp gvfs-mtp simple-mtpfs libusb gvfs-client gvfs-smb gvfs-fuse gigolo -y
@@ -138,9 +157,6 @@ dnf install https://dl.google.com/linux/direct/google-chrome-stable_current_x86_
 # Install Thunderbird
 dnf install thunderbird -y
 
-# Utility
-yum install rsync htop mtr rsnapshot curl vnstat unzip whois iperf curl strace sysstat ltrace zip traceroute bind-utils wavemon -y
-
 # LibreOffice
 dnf install libreoffice -y
 
@@ -148,7 +164,8 @@ dnf install libreoffice -y
 dnf install xclip gpg -y
 
 ## Font Rendering
-echo '<?xml version="1.0"?>
+cat >/etc/fonts/conf.d/99-autohinter-only.conf <<'EOL'
+<?xml version="1.0"?>
 <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
 <fontconfig>
 <match target="font">
@@ -156,11 +173,14 @@ echo '<?xml version="1.0"?>
 <bool>true</bool>
 </edit>
 </match>
-</fontconfig>' > /etc/fonts/conf.d/99-autohinter-only.conf
+</fontconfig>
+EOL
+
 ln -s /etc/fonts/conf.avail/10-autohint.conf /etc/fonts/conf.d/
 ln -s /etc/fonts/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d/
 
-echo '<?xml version="1.0"?>
+cat >/home/"$USERSUDO"/.fonts.conf <<'EOL'
+<?xml version="1.0"?>
 <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
 <fontconfig>
  <match target="font" >
@@ -188,14 +208,19 @@ echo '<?xml version="1.0"?>
    <bool>true</bool>
   </edit>
  </match>
-</fontconfig>' > sudo -u "$USERSUDO" tee /home/"$USERSUDO"/.fonts.conf > /dev/null
+</fontconfig>
+EOL
 
 sudo -u "$USERSUDO" bash -c 'echo "Xft.lcdfilter: lcddefault"' > /home/"$USERSUDO"/.Xresources
 
 
 # Font
-# dnf install freetype-freeworld -y
-# dnf install https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm -y
+dnf install freetype-freeworld -y
+
+TMP_FONT_FOLDER=$(mktemp)
+
+cd $TMP_FONT_FOLDER
+OVERPASS_LATEST=$(curl -s https://github.com/RedHatOfficial/Overpass/releases/latest | sed 's#.*tag/\(.*\)\".*#\1#' | sed 's/v//1')
 
 wget https://assets.ubuntu.com/v1/fad7939b-ubuntu-font-family-0.83.zip -O ubuntu.zip
 unzip ubuntu.zip
@@ -207,15 +232,13 @@ mv Overpass-* /usr/share/fonts/
 
 wget https://github.com/downloads/adobe-fonts/source-code-pro/SourceCodePro_FontsOnly-1.013.zip -O sourcecodepro.zip
 unzip sourcecodepro.zip
-mv SourceCodePro_FontsOnly-1.013 /usr/share/fonts/
 mv SourceCodePro_FontsOnly-* /usr/share/fonts/
 
-rm -f sourcecodepro.zip overpass.tar.gz ubuntu.zip
+rm -fr "$TMP_FONT_FOLDER"
 
 # tweak font
 dnf copr enable dawid/better_fonts -y
-dnf install fontconfig-enhanced-defaults fontconfig-font-replacements
-
+dnf install fontconfig-enhanced-defaults fontconfig-font-replacements -y
 
 # Tweak XFCE
 su "$USERSUDO" -m -c 'xfconf-query -c xfce4-panel -p /plugins/plugin-1/show-button-title -n -t bool -s false'
@@ -227,14 +250,14 @@ su "$USERSUDO" -m -c 'xfconf-query -c xsettings -p /Net/ThemeName -s "Glossy"'
 sed -i s/SELINUX=enforcing/SELINUX=disabled/g /etc/selinux/config
 
 # Mengamankan /tmp
-# cd ~
-# rm -rf /tmp
-# mkdir /tmp
-# mount -t tmpfs -o rw,noexec,nosuid tmpfs /tmp
-# chmod 1777 /tmp
-# echo "tmpfs   /tmp    tmpfs   rw,noexec,nosuid        0       0" >> /etc/fstab
-# rm -rf /var/tmp
-# ln -s /tmp /var/tmp
+cd ~
+rm -rf /tmp
+mkdir /tmp
+mount -t tmpfs -o rw,noexec,nosuid tmpfs /tmp
+chmod 1777 /tmp
+echo "tmpfs   /tmp    tmpfs   rw,noexec,nosuid        0       0" >> /etc/fstab
+rm -rf /var/tmp
+ln -s /tmp /var/tmp
 
 # Batasi ukuran log systemd
 echo '
@@ -271,7 +294,7 @@ mysql -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost',
 mysql -e "DELETE FROM mysql.user WHERE User='';"
 mysql -e "DROP DATABASE test;"
 mysql -e "FLUSH PRIVILEGES;"
-mysql -e "UPDATE mysql.user set plugin='' where user='root';"
+# mysql -e "UPDATE mysql.user set plugin='' where user='root';"
 
 echo "[client]
 user = root
@@ -319,11 +342,8 @@ wget https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py -
 chmod +x /usr/bin/speedtest
 
 # Telegram
-cd /opt;
-wget --content-disposition  https://telegram.org/dl/desktop/linux -O tsetup.tar.xz
-tar xJvf tsetup.tar.xz
-ln -s /opt/Telegram/Telegram /usr/bin/telegram
+wget --content-disposition -q https://telegram.org/dl/desktop/linux -O tsetup.tar.xz
+tar xJvf tsetup.tar.xz -C /opt
 rm -f tsetup.tar.xz
 
 echo "Install selesai!"
-exit 1
