@@ -67,6 +67,9 @@ echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sou
 wget -qO - http://nginx.org/keys/nginx_signing.key | apt-key add -
 echo "deb http://nginx.org/packages/mainline/debian/ $(lsb_release -sc) nginx" > /etc/apt/sources.list.d/nginx.list
 
+# update list of available packages
+apt-get update
+
 # Hapus aplikasi yang tidak dibutuhkan
 apt-get purge exim4* rpcbind samba* -y
 
