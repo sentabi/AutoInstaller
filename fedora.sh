@@ -2,6 +2,12 @@
 ## jangan asal di jalankan, liat dulu scriptna untuk menghindari hal-hal yang tidak
 ## diinginkan
 
+# Set Zona Waktu WIB
+rm -f /etc/localtime
+cp /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
+
+waktuMulai=$(date)
+
 # Set hostname
 if ! [[ -z "$1" ]]; then
         hostnamectl set-hostname --static $1
@@ -20,10 +26,6 @@ if [[ $USERSUDO == 'root' || -z $USERSUDO ]]; then
     echo "--------------------------------------------"
     exit 1
 fi
-
-# Set Zona Waktu WIB
-rm -f /etc/localtime
-cp /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 
 # Hapus aplikasi yang ngga perlu
 dnf remove transmission* claws-mail* abrt-* midori pidgin -y
@@ -61,7 +63,7 @@ dnf install wireshark nmap strace sysstat ltrace -y
 dnf install rsnapshot wavemon -y
 
 # CLI TOOLS
-dnf install mtr rsync htop curl whois iperf iperf3 traceroute bind-utils -y
+dnf install mtr rsync htop whois iperf iperf3 traceroute bind-utils -y
 
 # git prompt
 wget https://raw.github.com/git/git/master/contrib/completion/git-prompt.sh -O ~/.git-prompt.sh
@@ -347,3 +349,5 @@ tar xJvf tsetup.tar.xz -C /opt
 rm -f tsetup.tar.xz
 
 echo "Install selesai!"
+echo "Mulai dijalankan $waktuMulai"
+echo "Selesai $(date)"
