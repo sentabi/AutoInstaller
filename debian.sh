@@ -50,14 +50,6 @@ deb http://deb.debian.org/debian/ $DEBIAN_CODENAME-updates main
 deb-src http://deb.debian.org/debian/ $DEBIAN_CODENAME-updates main
 EOL
 
-# Repository PHP SURY
-wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
-echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
-
-# Repostory mainline nginx
-wget -qO - http://nginx.org/keys/nginx_signing.key | apt-key add -
-echo "deb http://nginx.org/packages/mainline/debian/ $(lsb_release -sc) nginx" >> /etc/apt/sources.list
-
 # Update Repository dan upgrade system
 apt-get update; apt upgrade -y
 
@@ -66,6 +58,14 @@ apt-get install wget pwgen sudo openssh-server curl unzip nano zip dialog -y
 
 # Network Tools
 apt-get install rsync htop rsnapshot vnstat mtr iperf whois dnsutils strace ltrace net-tools -y
+
+# Repository PHP SURY
+wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
+
+# Repostory mainline nginx
+wget -qO - http://nginx.org/keys/nginx_signing.key | apt-key add -
+echo "deb http://nginx.org/packages/mainline/debian/ $(lsb_release -sc) nginx" > /etc/apt/sources.list.d/nginx.list
 
 # Hapus aplikasi yang tidak dibutuhkan
 apt-get purge exim4* rpcbind samba* -y
