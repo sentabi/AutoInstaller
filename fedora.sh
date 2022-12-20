@@ -214,8 +214,8 @@ wget https://assets.ubuntu.com/v1/0cef8205-ubuntu-font-family-0.83.zip -O ubuntu
 unzip ubuntu.zip
 mv ubuntu-font-family-* /usr/share/fonts/
 
-wget https://github.com/RedHatBrand/Overpass/archive/3.0.5.tar.gz -O overpass.tar.gz
-tar zxvf overpass.tar.gz
+wget https://github.com/RedHatOfficial/Overpass/releases/download/v3.0.5/overpass-3.0.5.zip -O overpass.zip
+unzip overpass.zip
 mv Overpass-* /usr/share/fonts/
 
 wget https://github.com/downloads/adobe-fonts/source-code-pro/SourceCodePro_FontsOnly-1.013.zip -O sourcecodepro.zip
